@@ -1,4 +1,4 @@
-package com.shante.nerecipe
+package com.shante.nerecipe.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
