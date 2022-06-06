@@ -4,7 +4,7 @@ class EditRecipeItemUseCase(
     private val recipeListRepository: RecipeListRepository
 ) {
 
-    fun editRecipe(recipe: RecipeItem) {
+    fun editRecipe(recipe: Recipe) {
         recipeListRepository.editRecipe(recipe)
     }
 

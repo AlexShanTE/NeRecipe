@@ -1,5 +1,38 @@
 package com.shante.nerecipe.presentation.viewModel
 
-class RecipeViewModel {
-    // TODO
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.shante.nerecipe.data.InMemoryRecipeListRepositoryImpl
+import com.shante.nerecipe.domain.*
+
+class RecipeViewModel(
+    application: Application
+) : AndroidViewModel(application) {
+
+    private val repository = InMemoryRecipeListRepositoryImpl
+
+    private val addRecipeItemUseCase = AddRecipeItemUseCase(repository)
+    private val deleteRecipeItemUseCase = DeleteRecipeItemUseCase(repository)
+    private val editRecipeItemUseCase = EditRecipeItemUseCase(repository)
+    private val getRecipeItemUseCase = GetRecipeItemUseCase(repository)
+    private val getRecipeListUseCase = GetRecipeListUseCase(repository)
+
+    val recipeList = getRecipeListUseCase.getRecipeList()
+
+    fun deleteRecipe(recipe: Recipe) {
+        deleteRecipeItemUseCase.deleteRecipe(recipe)
+    }
+
+    fun editRecipe(recipe: Recipe) {
+        editRecipeItemUseCase.editRecipe(recipe)
+    }
+
+    fun addRecipe(recipe: Recipe) {
+        addRecipeItemUseCase.addRecipe(recipe)
+    }
+
+    fun getRecipe(recipeId: Int): Recipe {
+        return getRecipeItemUseCase.getRecipe(recipeId)
+    }
+
 }
