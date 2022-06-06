@@ -4,7 +4,7 @@ class DeleteRecipeItemUseCase(
     private val recipeListRepository: RecipeListRepository
 ) {
 
-    fun deleteRecipe(recipe: RecipeItem) {
+    fun deleteRecipe(recipe: Recipe) {
         recipeListRepository.deleteRecipe(recipe)
     }
 

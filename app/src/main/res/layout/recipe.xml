@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/base_padding"
+    >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/RecipePreview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recipe_preview_height"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/base_margin"
+        android:background="@drawable/shaped_rectangle"
+        android:padding="@dimen/base_padding"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="@dimen/base_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/RecipePreview"
+        app:layout_constraintTop_toTopOf="@id/RecipePreview"
+        tools:text="Russian kitchen" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/cooking_time"
+        android:layout_width="@dimen/cooking_time_view_size"
+        android:layout_height="@dimen/cooking_time_view_size"
+        android:layout_margin="@dimen/base_margin"
+        android:background="@drawable/circle"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:textSize="@dimen/preview_cooking_time_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/RecipePreview"
+        app:layout_constraintTop_toTopOf="@id/RecipePreview"
+        tools:text="1ч\n15 мин" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/favorite_button"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:padding="@dimen/base_padding"
+        android:background="@color/textView_preview_background"
+        android:src="@drawable/ic_star_border_24"
+        app:layout_constraintTop_toTopOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="@id/RecipePreview"
+        app:layout_constraintEnd_toEndOf="@id/RecipePreview" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/textView_preview_background"
+        android:ellipsize="end"
+        android:paddingHorizontal="@dimen/base_padding"
+        android:singleLine="true"
+        android:textSize="@dimen/preview_title_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/author"
+        app:layout_constraintEnd_toStartOf="@id/favorite_button"
+        app:layout_constraintStart_toStartOf="@id/RecipePreview"
+        tools:text="Блинчики" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/textView_preview_background"
+        android:ellipsize="end"
+        android:paddingHorizontal="@dimen/base_padding"
+        android:singleLine="true"
+        android:textSize="@dimen/preview_author_size"
+        app:layout_constraintBottom_toBottomOf="@id/RecipePreview"
+        app:layout_constraintEnd_toStartOf="@id/favorite_button"
+        app:layout_constraintStart_toStartOf="@id/RecipePreview"
+        tools:text="Author" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

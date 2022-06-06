@@ -4,7 +4,7 @@ class AddRecipeItemUseCase(
     private val recipeListRepository: RecipeListRepository
 ) {
 
-    fun addRecipe(recipe: RecipeItem) {
+    fun addRecipe(recipe: Recipe) {
         recipeListRepository.addRecipe(recipe)
     }
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- paddings -->
+    <dimen name="base_padding">8dp</dimen>
+    <!-- margins -->
+    <dimen name="base_margin">8dp</dimen>
+    <dimen name = "fab_button_margin">16dp</dimen>
+
+
+    <!-- element sizes -->
+    <dimen name="recipe_preview_height">240dp</dimen>
+    <dimen name="cooking_time_view_size">75dp</dimen>
+    <dimen name="favorite_icon_size">48dp</dimen>
+    <dimen name = "fab_button_size">40dp</dimen>
+
+
+    <!-- text sizes -->
+    <dimen name="base_text_size">16sp</dimen>
+    <dimen name="preview_title_size">24sp</dimen>
+    <dimen name="preview_author_size">16sp</dimen>
+    <dimen name="preview_cooking_time_size">16sp</dimen>
+
+
+
+</resources>

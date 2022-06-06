@@ -4,7 +4,7 @@ class GetRecipeItemUseCase(
     private val recipeListRepository: RecipeListRepository
 ) {
 
-    fun getRecipe(recipeId: Int): RecipeItem {
+    fun getRecipe(recipeId: Int): Recipe {
         return recipeListRepository.getRecipe(recipeId)
     }
 
