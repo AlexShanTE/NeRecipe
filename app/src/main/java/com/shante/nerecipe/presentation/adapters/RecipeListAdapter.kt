@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shante.nerecipe.R
-import com.shante.nerecipe.databinding.RecipeBinding
+import com.shante.nerecipe.databinding.RecipePreviewItemBinding
 import com.shante.nerecipe.domain.Recipe
 
 class RecipeListAdapter(
@@ -15,7 +15,7 @@ class RecipeListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = RecipeBinding.inflate(inflater, parent, false)
+        val binding = RecipePreviewItemBinding.inflate(inflater, parent, false)
         return ViewHolder(binding, recipeInteractionListener)
     }
 
@@ -24,7 +24,7 @@ class RecipeListAdapter(
     }
 
     class ViewHolder(
-        private val binding: RecipeBinding,
+        private val binding: RecipePreviewItemBinding,
         private val listener: RecipeInteractionListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
