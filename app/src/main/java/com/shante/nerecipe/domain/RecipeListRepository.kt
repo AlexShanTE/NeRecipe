@@ -14,4 +14,6 @@ interface RecipeListRepository {
 
     fun getRecipeList(): LiveData<List<Recipe>>
 
+    fun favorite(recipeId: Int)
+
 }
