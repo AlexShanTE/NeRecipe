@@ -2,12 +2,17 @@ package com.shante.nerecipe.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.shante.nerecipe.domain.CookingStep
+import com.shante.nerecipe.domain.Ingredient
 import com.shante.nerecipe.domain.Recipe
-import com.shante.nerecipe.domain.RecipeListRepository
+import com.shante.nerecipe.domain.repository.RecipeListRepository
+import kotlin.random.Random
 
 object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
 
     private const val GENERATED_RECIPE_AMOUNT = 5
+    private const val GENERATED_INGREDIENTS_AMOUNT = 5
+    private const val GENERATED_COOKING_STEPS_AMOUNT = 5
 
     private var id = 0
     private val recipeListLD = MutableLiveData<List<Recipe>>()
@@ -20,7 +25,18 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
                 title = "Recipe №$i",
                 author = "Me",
                 category = "Russian food",
-                cookingTime = "1h\n45min"
+                cookingTime = "1h\n45min",
+                ingredientsList =
+                List(GENERATED_INGREDIENTS_AMOUNT) {
+                    Ingredient(
+                        "Ingredient $it",
+                        "${Random.nextInt(10, 100)} шт.",
+                        it)
+                },
+                cookingStepsList =
+                List(GENERATED_COOKING_STEPS_AMOUNT) {
+                    CookingStep("Description $it", it)
+                }
             )
             addRecipe(newRecipe)
         }
@@ -59,6 +75,20 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
     override fun favorite(recipeId: Int) {
         recipeList.replaceAll {
             if (it.id == recipeId) it.copy(isFavorite = !it.isFavorite) else it
+        }
+        updateList()
+    }
+
+    override fun showIngredients(recipe: Recipe) {
+        recipeList.replaceAll {
+            if (it.id == recipe.id) it.copy(isIngredientsShowed = !it.isIngredientsShowed) else it
+        }
+        updateList()
+    }
+
+    override fun showCookSteps(recipe: Recipe) {
+        recipeList.replaceAll {
+            if (it.id == recipe.id) it.copy(isCookingStepsShowed = !it.isCookingStepsShowed) else it
         }
         updateList()
     }

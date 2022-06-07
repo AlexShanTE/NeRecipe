@@ -12,7 +12,7 @@
     >
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/number"
+        android:id="@+id/ingredientNumber"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -25,15 +25,15 @@
         tools:text="1. " />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/ingredient"
+        android:id="@+id/ingredientTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:textColor="@color/white"
         android:textSize="@dimen/base_text_size"
         app:layout_constraintEnd_toStartOf="@id/ingredientValue"
-        app:layout_constraintStart_toEndOf="@id/number"
-        app:layout_constraintTop_toTopOf="@id/number"
+        app:layout_constraintStart_toEndOf="@id/ingredientNumber"
+        app:layout_constraintTop_toTopOf="@id/ingredientNumber"
         tools:text="ingredient" />
 
 
@@ -46,9 +46,9 @@
         android:singleLine="true"
         android:textColor="@color/white"
         android:textSize="@dimen/base_text_size"
-        app:layout_constraintBottom_toBottomOf="@id/ingredient"
+        app:layout_constraintBottom_toBottomOf="@id/ingredientNumber"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ingredient"
+        app:layout_constraintTop_toTopOf="@id/ingredientNumber"
         tools:text="value" />
 
 

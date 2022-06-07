@@ -1,6 +1,7 @@
-package com.shante.nerecipe.domain
+package com.shante.nerecipe.domain.repository
 
 import androidx.lifecycle.LiveData
+import com.shante.nerecipe.domain.Recipe
 
 interface RecipeListRepository {
 
@@ -15,5 +16,9 @@ interface RecipeListRepository {
     fun getRecipeList(): LiveData<List<Recipe>>
 
     fun favorite(recipeId: Int)
+
+    fun showIngredients(recipe: Recipe)
+
+    fun showCookSteps(recipe: Recipe)
 
 }

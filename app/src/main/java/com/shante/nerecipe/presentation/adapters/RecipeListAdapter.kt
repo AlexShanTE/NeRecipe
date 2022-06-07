@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipePreviewItemBinding
 import com.shante.nerecipe.domain.Recipe
+import com.shante.nerecipe.presentation.adapters.iInteractionListeners.RecipeListInteractionListener
 
 class RecipeListAdapter(
-    private val recipeInteractionListener: RecipeInteractionListener
+    private val recipeInteractionListener: RecipeListInteractionListener
 ) : ListAdapter<Recipe, RecipeListAdapter.ViewHolder>(DiffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,7 +26,7 @@ class RecipeListAdapter(
 
     class ViewHolder(
         private val binding: RecipePreviewItemBinding,
-        private val listener: RecipeInteractionListener
+        private val listener: RecipeListInteractionListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var recipe: Recipe
@@ -35,7 +36,6 @@ class RecipeListAdapter(
                 listener.onRecipeItemClicked(recipe)
             }
             binding.favoriteButton.setOnClickListener{listener.onFavoriteClicked(recipe)}
-
         }
 
         fun bind(recipe: Recipe) {
