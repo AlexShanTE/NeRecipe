@@ -1,8 +1,8 @@
-package com.shante.nerecipe.presentation.adapters
+package com.shante.nerecipe.presentation.adapters.iInteractionListeners
 
 import com.shante.nerecipe.domain.Recipe
 
-interface RecipeInteractionListener {
+interface RecipeListInteractionListener {
 
     fun onFavoriteClicked(recipe: Recipe)
 

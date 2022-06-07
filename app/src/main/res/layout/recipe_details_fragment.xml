@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/recipeItemPreview"
+            layout="@layout/recipe_preview_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/showIngredientsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_margin"
+            android:background="@drawable/shaped_rectangle"
+            android:gravity="start|center"
+            android:text="@string/show_ingredients"
+            app:icon="@drawable/ic_arrow_drop_down"
+            app:iconGravity="end"
+            app:layout_constraintStart_toStartOf="@id/recipeItemPreview"
+            app:layout_constraintTop_toBottomOf="@id/recipeItemPreview" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ingredientsList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="@dimen/base_padding"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="@id/showIngredientsButton"
+            app:layout_constraintTop_toBottomOf="@id/showIngredientsButton"
+            tools:listitem="@layout/ingredients_item"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/showCookingInstructionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_margin"
+            android:background="@drawable/shaped_rectangle"
+            android:gravity="start|center"
+            android:text="@string/cooking_instruction"
+            app:icon="@drawable/ic_arrow_drop_down"
+            app:iconGravity="end"
+            app:layout_constraintStart_toStartOf="@id/recipeItemPreview"
+            app:layout_constraintTop_toBottomOf="@id/ingredientsList" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cookingInstructionList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="@id/showIngredientsButton"
+            app:layout_constraintTop_toBottomOf="@id/showCookingInstructionButton"
+            tools:listitem="@layout/cooking_step_item"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

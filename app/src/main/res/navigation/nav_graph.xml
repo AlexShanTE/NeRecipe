@@ -9,6 +9,18 @@
         android:name="com.shante.nerecipe.presentation.ui.FeedFragment"
         android:label="FeedFragment"
         tools:layout="@layout/feed_fragment">
+        <action
+            android:id="@+id/to_recipeDetailsFragment"
+            app:destination="@id/recipeDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipeDetailsFragment"
+        android:name="com.shante.nerecipe.presentation.ui.RecipeDetailsFragment"
+        android:label="RecipeDetailsFragment" >
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/base_padding">
+    android:id="@+id/recipe_preview"
+    android:padding="@dimen/base_padding"
+    >
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/recipePreview"

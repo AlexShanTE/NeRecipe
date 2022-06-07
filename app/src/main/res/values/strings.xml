@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">NeRecipe</string>
     <string name="add_recipe">Add recipe</string>
+    <string name="show_ingredients">Show ingredients</string>
+    <string name="cooking_instruction">Cooking instruction</string>
 </resources>

@@ -1,17 +1,16 @@
 package com.shante.nerecipe.presentation.viewModel
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.shante.nerecipe.data.InMemoryRecipeListRepositoryImpl
 import com.shante.nerecipe.domain.*
 import com.shante.nerecipe.domain.useCases.*
-import com.shante.nerecipe.presentation.adapters.iInteractionListeners.RecipeListInteractionListener
+import com.shante.nerecipe.presentation.adapters.iInteractionListeners.RecipeDetailsInteractionListener
 import com.shante.nerecipe.utils.SingleLiveEvent
 
-class RecipeViewModel(
+class RecipeDetailsViewModel(
     application: Application
-) : AndroidViewModel(application), RecipeListInteractionListener {
+) : AndroidViewModel(application), RecipeDetailsInteractionListener {
 
     private val repository = InMemoryRecipeListRepositoryImpl
 
@@ -22,8 +21,6 @@ class RecipeViewModel(
     private val getRecipeListUseCase = GetRecipeListUseCase(repository)
 
     val recipeList = getRecipeListUseCase.getRecipeList()
-
-    val navigateToRecipeDetailsScreen = SingleLiveEvent<Recipe>()
 
 
     fun deleteRecipe(recipe: Recipe) {
@@ -42,17 +39,18 @@ class RecipeViewModel(
         return getRecipeItemUseCase.getRecipe(recipeId)
     }
 
-    //region RecipeListInteractionListener
+    fun getRecipeIngredients(recipe: Recipe): List<Ingredient> {
+        return recipe.ingredientsList
+    }
+
+    fun getRecipeCookSteps(recipe: Recipe): List<CookingStep> {
+        return recipe.cookingStepsList
+    }
+
     override fun onFavoriteClicked(recipe: Recipe) = repository.favorite(recipe.id)
 
-    override fun onRecipeItemClicked(recipe: Recipe) {
-        Toast.makeText(
-            getApplication<Application>().applicationContext,
-            "Clicked on recipe ${recipe.id}",
-            Toast.LENGTH_SHORT
-        ).show()
-        navigateToRecipeDetailsScreen.value = recipe
-    }
-    //endregion RecipeInteractionListener
+    override fun onIngredientsShowClicked(recipe: Recipe) = repository.showIngredients(recipe)
+
+    override fun onCookStepsShowClicked(recipe: Recipe) = repository.showCookSteps(recipe)
 
 }
