@@ -1,13 +1,15 @@
 package com.shante.nerecipe.presentation.viewModel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.shante.nerecipe.data.InMemoryRecipeListRepositoryImpl
 import com.shante.nerecipe.domain.*
+import com.shante.nerecipe.presentation.adapters.RecipeInteractionListener
 
 class RecipeViewModel(
     application: Application
-) : AndroidViewModel(application) {
+) : AndroidViewModel(application), RecipeInteractionListener {
 
     private val repository = InMemoryRecipeListRepositoryImpl
 
@@ -34,5 +36,17 @@ class RecipeViewModel(
     fun getRecipe(recipeId: Int): Recipe {
         return getRecipeItemUseCase.getRecipe(recipeId)
     }
+
+    //region RecipeInteractionListener
+    override fun onFavoriteClicked(recipe: Recipe) = repository.favorite(recipe.id)
+
+    override fun onRecipeItemClicked(recipe: Recipe) {
+        Toast.makeText(
+            getApplication<Application>().applicationContext,
+            "Clicked on recipe , author of recipe is ${recipe.author}",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+    //endregion RecipeInteractionListener
 
 }

@@ -19,7 +19,8 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
             val newRecipe = Recipe(
                 title = "Recipe №$i",
                 author = "Me",
-                category = "Russian food"
+                category = "Russian food",
+                cookingTime = "1h\n45min"
             )
             addRecipe(newRecipe)
         }
@@ -53,6 +54,13 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
 
     override fun getRecipeList(): LiveData<List<Recipe>> {
         return recipeListLD
+    }
+
+    override fun favorite(recipeId: Int) {
+        recipeList.replaceAll {
+            if (it.id == recipeId) it.copy(isFavorite = !it.isFavorite) else it
+        }
+        updateList()
     }
 
     private fun updateList() {

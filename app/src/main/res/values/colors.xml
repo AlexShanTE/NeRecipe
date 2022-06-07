@@ -9,7 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="textView_preview_background">#80FFFFFF</color>
+    <color name="textView_preview_background">#CCFFFFFF</color>
     <color name="textView_preview_stroke">#FFFFFFFF</color>
     <color name="favorite_color">#ebd619</color>
+    <color name="text_main_color">#FF000000</color>
 </resources>
