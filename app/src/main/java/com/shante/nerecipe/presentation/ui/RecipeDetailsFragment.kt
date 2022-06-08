@@ -11,9 +11,10 @@ import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipeDetailsFragmentBinding
 import com.shante.nerecipe.presentation.adapters.RecipeCookingStepsAdapter
 import com.shante.nerecipe.presentation.adapters.RecipeIngredientsAdapter
+import com.shante.nerecipe.presentation.ui.contract.HasCustomTitle
 import com.shante.nerecipe.presentation.viewModel.RecipeDetailsViewModel
 
-class RecipeDetailsFragment : Fragment() {
+class RecipeDetailsFragment : Fragment(), HasCustomTitle {
 
     private val viewModel: RecipeDetailsViewModel by viewModels()
     private val args by navArgs<RecipeDetailsFragmentArgs>()
@@ -94,5 +95,6 @@ class RecipeDetailsFragment : Fragment() {
 
     }.root
 
+    override fun getTitleRes() = R.string.recipe_details
 
 }

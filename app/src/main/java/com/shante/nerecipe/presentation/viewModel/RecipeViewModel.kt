@@ -42,7 +42,8 @@ class RecipeViewModel(
         return getRecipeItemUseCase.getRecipe(recipeId)
     }
 
-    //region RecipeListInteractionListener
+    // region RecipeListInteractionListener
+
     override fun onFavoriteClicked(recipe: Recipe) = repository.favorite(recipe.id)
 
     override fun onRecipeItemClicked(recipe: Recipe) {
@@ -53,6 +54,7 @@ class RecipeViewModel(
         ).show()
         navigateToRecipeDetailsScreen.value = recipe
     }
-    //endregion RecipeInteractionListener
+
+    // endregion RecipeInteractionListener
 
 }

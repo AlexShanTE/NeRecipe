@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.FeedFragmentBinding
 import com.shante.nerecipe.domain.Recipe
 import com.shante.nerecipe.presentation.adapters.RecipeListAdapter
+import com.shante.nerecipe.presentation.ui.contract.HasCustomTitle
 import com.shante.nerecipe.presentation.viewModel.RecipeViewModel
 
-class FeedFragment : Fragment() {
+class RecipeListFragment : Fragment(), HasCustomTitle {
 
     private val viewModel: RecipeViewModel by viewModels()
 
@@ -20,7 +22,7 @@ class FeedFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.navigateToRecipeDetailsScreen.observe(this) { recipe ->
-            val direction = FeedFragmentDirections.toRecipeDetailsFragment(recipe.id)
+            val direction = RecipeListFragmentDirections.toRecipeDetailsFragment(recipe.id)
             findNavController().navigate(direction)
         }
 
@@ -43,5 +45,6 @@ class FeedFragment : Fragment() {
 
     }.root
 
+    override fun getTitleRes() = R.string.recipe_list
 
 }
