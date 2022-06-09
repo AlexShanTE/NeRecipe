@@ -1,17 +1,13 @@
 package com.shante.nerecipe.presentation.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.ActivityMainBinding
-import com.shante.nerecipe.presentation.ui.contract.HasCustomTitle
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,8 +37,9 @@ class MainActivity : AppCompatActivity() {
     private val destinationListener =
         NavController.OnDestinationChangedListener { _, destination, _ ->
             supportActionBar?.title = destination.label
-            if (destination.label == "RecipeDetailsFragment") binding.bottomNavigation.visibility = View.GONE
-            else binding.bottomNavigation.visibility = View.VISIBLE
+            if (destination.label == "RecipeListFragment"){
+//                binding.toolBarEditText.visibility = View.GONE
+            }
         }
 
     private fun onNavControllerActivated(navController: NavController) {
@@ -51,5 +48,6 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener(destinationListener)
         this.navController = navController
     }
+
 
 }

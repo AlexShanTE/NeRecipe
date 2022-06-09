@@ -17,8 +17,14 @@ interface RecipeListRepository {
 
     fun favorite(recipeId: Int)
 
+    fun findRecipeByRequest(request:String)
+
     fun showIngredients(recipe: Recipe)
 
     fun showCookSteps(recipe: Recipe)
+
+    companion object {
+        const val CANCEL_SEARCH_REQUEST = "cancel request"
+    }
 
 }

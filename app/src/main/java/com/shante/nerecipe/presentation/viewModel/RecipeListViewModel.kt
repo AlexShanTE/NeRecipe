@@ -4,12 +4,13 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.shante.nerecipe.data.InMemoryRecipeListRepositoryImpl
-import com.shante.nerecipe.domain.*
+import com.shante.nerecipe.domain.Recipe
+import com.shante.nerecipe.domain.repository.RecipeListRepository
 import com.shante.nerecipe.domain.useCases.*
 import com.shante.nerecipe.presentation.adapters.iInteractionListeners.RecipeListInteractionListener
 import com.shante.nerecipe.utils.SingleLiveEvent
 
-class RecipeViewModel(
+class RecipeListViewModel(
     application: Application
 ) : AndroidViewModel(application), RecipeListInteractionListener {
 
@@ -20,6 +21,7 @@ class RecipeViewModel(
     private val editRecipeItemUseCase = EditRecipeItemUseCase(repository)
     private val getRecipeItemUseCase = GetRecipeItemUseCase(repository)
     private val getRecipeListUseCase = GetRecipeListUseCase(repository)
+
 
     val recipeList = getRecipeListUseCase.getRecipeList()
 
@@ -42,6 +44,7 @@ class RecipeViewModel(
         return getRecipeItemUseCase.getRecipe(recipeId)
     }
 
+
     // region RecipeListInteractionListener
 
     override fun onFavoriteClicked(recipe: Recipe) = repository.favorite(recipe.id)
@@ -54,6 +57,10 @@ class RecipeViewModel(
         ).show()
         navigateToRecipeDetailsScreen.value = recipe
     }
+
+    override fun onSearchClicked(request: String) = repository.findRecipeByRequest(request)
+
+    override fun onCancelClicked() = repository.findRecipeByRequest(RecipeListRepository.CANCEL_SEARCH_REQUEST)
 
     // endregion RecipeInteractionListener
 

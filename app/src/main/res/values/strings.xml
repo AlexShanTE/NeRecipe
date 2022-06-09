@@ -5,6 +5,18 @@
     <string name="recipe_list">Recipe list</string>
     <string name="recipe_details">Recipe details</string>
 
+    <!-- Top app bar menu -->
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="top_bar_search_hint">Recipe name</string>
+
+
+
     <!-- Bottom menu -->
     <string name="all_recipes">Recipes</string>
     <string name="my_recipes">My recipes</string>
