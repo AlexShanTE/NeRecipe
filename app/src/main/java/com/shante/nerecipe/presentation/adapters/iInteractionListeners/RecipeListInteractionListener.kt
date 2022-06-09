@@ -8,4 +8,8 @@ interface RecipeListInteractionListener {
 
     fun onRecipeItemClicked(recipe: Recipe)
 
+    fun onSearchClicked(request: String)
+
+    fun onCancelClicked()
+
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search_button"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        android:contentDescription="@string/search"
+        app:showAsAction = "ifRoom"
+        />
+
+    <item
+        android:id="@+id/filter_button"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/filter"
+        android:contentDescription="@string/filter"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/add_button"
+        android:icon="@drawable/ic_add_24"
+        android:title="@string/add"
+        android:contentDescription="@string/add"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/edit_button"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/edit"
+        android:contentDescription="@string/edit"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/delete_button"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete"
+        android:contentDescription="@string/delete"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/cancel_button"
+        android:icon="@drawable/ic_cancel"
+        android:title="@string/cancel"
+        android:contentDescription="@string/cancel"
+        app:showAsAction="ifRoom"
+        />
+
+</menu>

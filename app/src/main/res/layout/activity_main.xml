@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
-    android:id="@+id/nav_host_fragment_container"
-    android:name="androidx.navigation.fragment.NavHostFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:defaultNavHost="true"
-    app:navGraph="@navigation/nav_graph"
-    tools:context=".presentation.ui.MainActivity"
+    android:orientation="vertical">
 
-    />
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        app:menu="@menu/top_app_bar_menu"
+        app:title="Screen Title"
+        app:titleTextColor="@color/white">
+
+        <EditText
+            android:id="@+id/toolBarEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shaped_rectangle"
+            android:gravity="center_vertical"
+            android:hint="@string/top_bar_search_hint"
+            android:padding="@dimen/base_padding"
+            android:singleLine="true"
+            android:textSize="@dimen/base_text_size"
+            android:textStyle="bold"
+            android:visibility="gone"
+            />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
+        tools:context=".presentation.ui.MainActivity" />
+</LinearLayout>

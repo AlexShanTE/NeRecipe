@@ -3,21 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/feedFragment">
+    app:startDestination="@id/recipeListFragment">
     <fragment
-        android:id="@+id/feedFragment"
-        android:name="com.shante.nerecipe.presentation.ui.FeedFragment"
-        android:label="FeedFragment"
+        android:id="@+id/recipeListFragment"
+        android:name="com.shante.nerecipe.presentation.ui.RecipeListFragment"
+        android:label="RecipeListFragment"
         tools:layout="@layout/feed_fragment">
         <action
             android:id="@+id/to_recipeDetailsFragment"
-            app:destination="@id/recipeDetailsFragment" />
+            app:destination="@id/recipeDetailsFragment"
+            />
     </fragment>
 
     <fragment
         android:id="@+id/recipeDetailsFragment"
         android:name="com.shante.nerecipe.presentation.ui.RecipeDetailsFragment"
-        android:label="RecipeDetailsFragment" >
+        android:label="RecipeDetailsFragment"
+        tools:layout="@layout/recipe_details_fragment">
         <argument
             android:name="recipeId"
             app:argType="integer" />
