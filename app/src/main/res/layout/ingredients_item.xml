@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shaped_rectangle"
-    android:backgroundTint="@color/black"
+    android:backgroundTint="@color/mtrl_btn_bg_color_selector"
     android:layout_margin="1dp"
     >
 

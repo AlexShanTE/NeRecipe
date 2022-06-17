@@ -2,8 +2,10 @@ package com.shante.nerecipe.presentation.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -48,7 +50,37 @@ class RecipeEditorFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = RecipeEditorFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
 
+        //        Callback for backPressed
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            clearServicesData()
+            findNavController().popBackStack()
+        }
+
         val recipe = args.recipe
+
+        Log.d("TAG",args.toString())
+
+        if (recipe !== null) {
+            ingredientService.setIngredientsList(recipe.ingredientsList as MutableList<Ingredient>)
+            cookingStepsService.setCookingStepsList(recipe.cookingInstructionList as MutableList<CookingStep>)
+            binding.title.setText(recipe.title)
+            binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.cookingTime))
+            binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.cookingTime))
+            binding.kitchenCategoryTitle.text = recipe.kitchenCategory
+            if (recipe.previewURL !== null) {
+                binding.previewAddButton.visibility = View.GONE
+                binding.previewClearButton.visibility = View.VISIBLE
+                Glide.with(this)
+                    .asDrawable()
+                    .load(recipe.previewURL)
+                    .error(R.drawable.ic_no_image)
+                    .into(binding.recipePreview)
+            } else {
+                binding.recipePreview.setImageResource(R.drawable.ic_no_image)
+                binding.previewAddButton.visibility = View.VISIBLE
+                binding.previewClearButton.visibility = View.GONE
+            }
+        }
 
         val ingredientsAdapter = IngredientsAdapter(object : IngredientActionListener {
             override fun onIngredientUp(ingredient: Ingredient, moveBy: Int) {
@@ -79,45 +111,18 @@ class RecipeEditorFragment : Fragment() {
                     override fun onCookingStepUp(cookingStep: CookingStep, moveBy: Int) {
                         cookingStepsService.moveCookingStep(cookingStep, moveBy)
                     }
-
                     override fun onCookingStepDown(cookingStep: CookingStep, moveBy: Int) {
                         cookingStepsService.moveCookingStep(cookingStep, moveBy)
                     }
-
                     override fun onCookingStepEdit(cookingStep: CookingStep) {
-                        val direction =
-                            RecipeEditorFragmentDirections.toCookingStepEditorFragment(cookingStep)
+                        val direction = RecipeEditorFragmentDirections.toCookingStepEditorFragment(cookingStep)
                         findNavController().navigate(direction)
                     }
-
                     override fun onCookingStepDelete(cookingStep: CookingStep) {
                         cookingStepsService.deleteCookingStep(cookingStep)
                     }
-
                 })
             }
-
-        if (recipe !== null) {
-            ingredientService.setIngredientsList(recipe.ingredientsList)
-            cookingStepsService.setCookingStepsList(recipe.cookingInstructionList)
-            binding.title.setText(recipe.title)
-            binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.cookingTime))
-            binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.cookingTime))
-            binding.kitchenCategoryTitle.text = recipe.kitchenCategory
-            if (recipe.previewURL !== null) {
-                binding.previewAddButton.visibility = View.GONE
-                binding.previewClearButton.visibility = View.VISIBLE
-                Glide.with(this)
-                    .asDrawable()
-                    .load(recipe.previewURL)
-                    .error(R.drawable.ic_no_image)
-                    .into(binding.recipePreview)
-            } else {
-                binding.recipePreview.setImageResource(R.drawable.ic_no_image)
-                binding.previewAddButton.visibility = View.VISIBLE
-                binding.previewClearButton.visibility = View.GONE
-            }
-        }
 
         binding.ingredientEditGroup.visibility = View.GONE
 
@@ -255,16 +260,14 @@ class RecipeEditorFragment : Fragment() {
                          ecли selectedRecipePreviewImageUri не null то загрузить на сервер и передать ссылку
                          selectedRecipePreviewImageUri обнулить
                     */
-                    previewURL = null,
+                    previewURL = args.recipe?.previewURL,
                     isIngredientsShowed = false,
                     isCookingStepsShowed = false,
                     isFavorite = false
 
                 )
                 if (checkRecipeForEmptyFields(newRecipe)) {
-//                    ingredientService.targetIngredient = null //TODO если эта хрень есть то чистится вьюмодель
-//                    ingredientService.clearIngredients() //TODO если эта хрень есть то чистится вьюмодель
-//                    cookingStepsService.clearCookingSteps() //TODO если эта хрень есть то чистится вьюмодель
+                    clearServicesData()
                     resultBundle.putParcelable(RESULT_KEY_FOR_ADD_NEW_RECIPE, newRecipe)
                     setFragmentResult(REQUEST_KEY, resultBundle)
                     findNavController().popBackStack()
@@ -272,6 +275,7 @@ class RecipeEditorFragment : Fragment() {
                 true
             }
             R.id.preview_clear_button -> {
+                clearServicesData()
                 findNavController().popBackStack()
                 true
             }
@@ -305,8 +309,14 @@ class RecipeEditorFragment : Fragment() {
         ).show()
     }
 
+    private fun clearServicesData(){
+        ingredientService.targetIngredient = null //TODO если эта хрень есть то чистится вьюмодель
+        ingredientService.setIngredientsList(mutableListOf()) //TODO если эта хрень есть то чистится вьюмодель
+        cookingStepsService.setCookingStepsList(mutableListOf()) //TODO если эта хрень есть то чистится вьюмодель
+    }
+
     companion object {
-        const val RESULT_KEY_FOR_ADD_NEW_RECIPE = "add new recipe"
+        const val RESULT_KEY_FOR_ADD_NEW_RECIPE = "add recipe"
         const val REQUEST_KEY = "requestKey"
         const val MIMETYPE_IMAGES = "image/*"
 

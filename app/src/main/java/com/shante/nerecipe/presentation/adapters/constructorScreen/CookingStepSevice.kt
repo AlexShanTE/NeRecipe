@@ -16,8 +16,8 @@ object CookingStepSevice {
         return cookingSteps
     }
 
-    fun setCookingStepsList(cookingStepsList: List<CookingStep>) {
-        cookingSteps = cookingStepsList as MutableList<CookingStep>
+    fun setCookingStepsList(cookingStepsList: MutableList<CookingStep>) {
+        cookingSteps = cookingStepsList
     }
 
     fun deleteCookingStep(cookingStep: CookingStep) {
