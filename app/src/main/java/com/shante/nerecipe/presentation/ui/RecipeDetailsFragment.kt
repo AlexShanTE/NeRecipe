@@ -9,6 +9,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipeDetailsFragmentBinding
 import com.shante.nerecipe.domain.Recipe
@@ -48,7 +49,6 @@ class RecipeDetailsFragment : Fragment() {
 
         val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
 
-        //TODO обработать OnBackPress , чтоб сворачивало инфо об ингредиентах и инструкцию по приготовлению
 //        Callback for backPressed
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (toolBarEditText.text.isNotEmpty()) toolBarEditText.visibility = View.VISIBLE
@@ -60,6 +60,17 @@ class RecipeDetailsFragment : Fragment() {
             with(binding) {
                 recipeItemPreview.author.text = recipe.author
                 recipeItemPreview.title.text = recipe.title
+                if (recipe.previewURL !== null) {
+                    Glide.with(this@RecipeDetailsFragment)
+                        .asDrawable()
+                        .load(recipe.previewURL)
+                        .error(R.drawable.ic_no_image)
+                        .into(recipeItemPreview.recipePreview)
+                } else {
+                    recipeItemPreview.recipePreview.setImageResource(R.drawable.ic_no_image)
+                }
+
+
                 if (recipe.kitchenCategory == "Undefined category") { //todo придумать что то с категорией
                     recipeItemPreview.kitchenCategory.visibility = View.GONE
                 } else recipeItemPreview.kitchenCategory.text = recipe.kitchenCategory
@@ -107,6 +118,7 @@ class RecipeDetailsFragment : Fragment() {
                     }
                 }
 
+
                 showCookingInstructionButton.setOnClickListener {
                     viewModel.onCookStepsShowClicked(recipe)
                 }
@@ -134,7 +146,7 @@ class RecipeDetailsFragment : Fragment() {
         with(menu) {
             findItem(R.id.search_button).isVisible = false
             findItem(R.id.filter_button).isVisible = false
-            findItem(R.id.cancel_button).isVisible = false
+            findItem(R.id.preview_clear_button).isVisible = false
             findItem(R.id.add_button).isVisible = false
             findItem(R.id.ok_button).isVisible = false
             val myId = 2 //TODO get my id to show corrected list

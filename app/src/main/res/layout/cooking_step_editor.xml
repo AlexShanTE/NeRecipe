@@ -16,18 +16,18 @@
         tools:src="@tools:sample/avatars" />
 
     <ImageButton
-        android:id="@+id/add_preview"
+        android:id="@+id/preview_add_button"
         android:layout_width="@dimen/base_constructor_icon_size"
         android:layout_height="@dimen/base_constructor_icon_size"
         android:layout_margin="@dimen/base_margin"
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_add_circle"
-        app:layout_constraintEnd_toStartOf="@id/clear_preview"
+        app:layout_constraintEnd_toStartOf="@id/clear_preview_button"
         app:layout_constraintTop_toTopOf="@id/step_preview" />
 
     <ImageButton
-        android:id="@+id/clear_preview"
+        android:id="@+id/clear_preview_button"
         android:layout_width="@dimen/base_constructor_icon_size"
         android:layout_height="@dimen/base_constructor_icon_size"
         android:layout_margin="@dimen/base_margin"

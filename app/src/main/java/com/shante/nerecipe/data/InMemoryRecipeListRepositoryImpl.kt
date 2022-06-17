@@ -39,8 +39,14 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
                 },
                 cookingInstructionList =
                 List(GENERATED_COOKING_STEPS_AMOUNT) {
-                    CookingStep("Description $it", null,  it)
-                }
+                    CookingStep(
+                        description = "Description $it",
+                        stepImageURL = RecipeFilling.setRandomCookingStepImage(),
+                        id = it
+                    )
+                },
+                previewURL = RecipeFilling.setRandomImagePreview()
+
             )
             addRecipe(recipe)
         }

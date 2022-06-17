@@ -1,26 +1,22 @@
 package com.shante.nerecipe.presentation.ui
 
-import android.graphics.Path
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.EditText
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipeEditorFragmentBinding
 import com.shante.nerecipe.domain.CookingStep
 import com.shante.nerecipe.domain.Ingredient
 import com.shante.nerecipe.domain.Recipe
 import com.shante.nerecipe.presentation.adapters.constructorScreen.*
-import com.shante.nerecipe.presentation.viewModel.RecipeListViewModel
 import com.shante.nerecipe.utils.CookingTimeConverter
 
 
@@ -31,11 +27,20 @@ class RecipeEditorFragment : Fragment() {
     private val ingredientService: IngredientService = IngredientService
     private val cookingStepsService: CookingStepSevice = CookingStepSevice
 
+    private var selectedRecipePreviewImageUri: Uri? = null
+
+    private val pickImage: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri: Uri ->
+            selectedRecipePreviewImageUri = imageUri
+            view?.findViewById<ImageView>(R.id.recipe_preview)?.setImageURI(imageUri)
+            view?.findViewById<ImageButton>(R.id.preview_add_button)?.visibility = View.GONE
+            view?.findViewById<ImageButton>(R.id.preview_clear_button)?.visibility = View.VISIBLE
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,6 +104,19 @@ class RecipeEditorFragment : Fragment() {
             binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.cookingTime))
             binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.cookingTime))
             binding.kitchenCategoryTitle.text = recipe.kitchenCategory
+            if (recipe.previewURL !== null) {
+                binding.previewAddButton.visibility = View.GONE
+                binding.previewClearButton.visibility = View.VISIBLE
+                Glide.with(this)
+                    .asDrawable()
+                    .load(recipe.previewURL)
+                    .error(R.drawable.ic_no_image)
+                    .into(binding.recipePreview)
+            } else {
+                binding.recipePreview.setImageResource(R.drawable.ic_no_image)
+                binding.previewAddButton.visibility = View.VISIBLE
+                binding.previewClearButton.visibility = View.GONE
+            }
         }
 
         binding.ingredientEditGroup.visibility = View.GONE
@@ -116,12 +134,23 @@ class RecipeEditorFragment : Fragment() {
         ingredientService.addListener(ingredientsListener)  //TODO разобраться со слушателем
         cookingStepsService.addListener(cookingStepsListener)  //TODO разобраться со слушателем
 
+        binding.previewClearButton.setOnClickListener {
+            binding.previewAddButton.visibility = View.VISIBLE
+            binding.previewClearButton.visibility = View.GONE
+            binding.recipePreview.setImageResource(R.drawable.ic_no_image)
+        }
+
+        binding.previewAddButton.setOnClickListener {
+            pickImage.launch(MIMETYPE_IMAGES)
+        }
+
         binding.cancelEditIngredientButton.setOnClickListener {
             binding.newIngredientNameEditText.text.clear()
             binding.newIngredientValueEditText.text.clear()
             binding.addIngredientButton.text = getString(R.string.add_ingredient)
             binding.ingredientEditGroup.visibility = View.GONE
         }
+
         binding.kitchenCategoryButton.setOnClickListener {
             PopupMenu(binding.root.context, binding.kitchenCategoryButton).apply {
                 inflate(R.menu.kitchen_category_menu)
@@ -131,6 +160,7 @@ class RecipeEditorFragment : Fragment() {
                 }
             }.show()
         }
+
         binding.addIngredientButton.setOnClickListener {
             val ingredientEditGroupVisibility = binding.ingredientEditGroup.visibility
             val targetIngredient =
@@ -177,6 +207,7 @@ class RecipeEditorFragment : Fragment() {
             }
 
         }
+
         binding.addCookingStepButton.setOnClickListener {
             val direction = RecipeEditorFragmentDirections.toCookingStepEditorFragment(null)
             findNavController().navigate(direction)
@@ -200,7 +231,7 @@ class RecipeEditorFragment : Fragment() {
             findItem(R.id.edit_button).isVisible = false
             findItem(R.id.delete_button).isVisible = false
             findItem(R.id.ok_button).isVisible = true
-            findItem(R.id.cancel_button).isVisible = true
+            findItem(R.id.preview_clear_button).isVisible = true
         }
     }
 
@@ -220,6 +251,11 @@ class RecipeEditorFragment : Fragment() {
                     ),
                     ingredientsList = IngredientService.getIngredients(),
                     cookingInstructionList = CookingStepSevice.getCookingSteps(),
+                    /* todo если стоит заглушка, то передать  в previewURL Null,
+                         ecли selectedRecipePreviewImageUri не null то загрузить на сервер и передать ссылку
+                         selectedRecipePreviewImageUri обнулить
+                    */
+                    previewURL = null,
                     isIngredientsShowed = false,
                     isCookingStepsShowed = false,
                     isFavorite = false
@@ -235,7 +271,7 @@ class RecipeEditorFragment : Fragment() {
                 }
                 true
             }
-            R.id.cancel_button -> {
+            R.id.preview_clear_button -> {
                 findNavController().popBackStack()
                 true
             }
@@ -272,6 +308,8 @@ class RecipeEditorFragment : Fragment() {
     companion object {
         const val RESULT_KEY_FOR_ADD_NEW_RECIPE = "add new recipe"
         const val REQUEST_KEY = "requestKey"
+        const val MIMETYPE_IMAGES = "image/*"
+
     }
 
 }

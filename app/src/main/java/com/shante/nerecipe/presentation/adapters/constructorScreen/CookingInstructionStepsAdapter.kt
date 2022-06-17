@@ -1,13 +1,12 @@
 package com.shante.nerecipe.presentation.adapters.constructorScreen
 
 import android.content.Context
-import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.CookingStepItemBinding
 import com.shante.nerecipe.domain.CookingStep
@@ -59,9 +58,16 @@ class CookingInstructionStepsAdapter(
             cookingStepOptionsButton.tag = cookingStep
             step.text = context.getString(R.string.step, position + 1)
             cookingStepDescription.text = cookingStep.description
-            if (cookingStep.uri == null) {
+            if (cookingStep.stepImageURL == null) {
                 stepPreview.visibility = View.GONE
-            } // TODO else load image
+            } else {
+                stepPreview.visibility = View.VISIBLE
+                Glide.with(holder.binding.stepPreview)
+                    .asDrawable()
+                    .load(cookingStep.stepImageURL)
+                    .error(R.drawable.ic_no_image)
+                    .into(holder.binding.stepPreview)
+            }
             cookingStepOptionsButton.visibility = View.VISIBLE
         }
     }

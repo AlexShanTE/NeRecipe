@@ -43,7 +43,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/cancel_button"
+        android:id="@+id/preview_clear_button"
         android:contentDescription="@string/cancel"
         android:icon="@drawable/ic_cancel"
         android:title="@string/cancel"

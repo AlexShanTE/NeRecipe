@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipePreviewItemBinding
 import com.shante.nerecipe.domain.Recipe
@@ -42,13 +43,22 @@ class RecipeListAdapter(
             with(binding) {
                 author.text = recipe.author
                 title.text = recipe.title
-                recipePreview.setImageResource(R.mipmap.ic_food) //TODO download img
                 if (recipe.kitchenCategory == "Undefined category") { //todo придумать что то с категорией
                     kitchenCategory.visibility = View.GONE
                 } else kitchenCategory.text = recipe.kitchenCategory
                 if (recipe.cookingTime == null) {
                     cookingTime.visibility = View.GONE
                 } else cookingTime.text = recipe.cookingTime
+                if (recipe.previewURL !== null) {
+                    Glide.with(recipePreview)
+                        .asDrawable()
+                        .load(recipe.previewURL)
+                        .error(R.drawable.ic_no_image)
+                        .into(recipePreview)
+                } else {
+                    recipePreview.setImageResource(R.drawable.ic_no_image)
+                }
+
 
                 when (recipe.isFavorite) {
                     true -> favoriteButton.setImageResource(R.drawable.ic_star_24)
