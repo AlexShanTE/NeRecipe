@@ -24,13 +24,6 @@ class RecipeListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        setFragmentResultListener(requestKey = RecipeEditorFragment.REQUEST_KEY) { requestKey, bundle ->
-            if (requestKey !== RecipeEditorFragment.REQUEST_KEY) return@setFragmentResultListener
-            val newRecipe =
-                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_FOR_ADD_NEW_RECIPE)
-            if (newRecipe != null)
-                viewModel.addRecipe(newRecipe)
-        }
 
         viewModel.navigateToRecipeDetailsScreen.observe(this) { recipe ->
             val direction = RecipeListFragmentDirections.toRecipeDetailsFragment(recipe.id)
@@ -38,7 +31,7 @@ class RecipeListFragment : Fragment() {
         }
 
         viewModel.navigateToRecipeEditorScreen.observe(this) { recipe ->
-            val direction = RecipeListFragmentDirections.toRecipeConstructorFragment(recipe)
+            val direction = RecipeListFragmentDirections.toRecipeEditorFragment(recipe)
             findNavController().navigate(direction)
         }
 
@@ -50,6 +43,13 @@ class RecipeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = RecipeListFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
 
+        setFragmentResultListener(requestKey = RecipeEditorFragment.REQUEST_KEY) { requestKey, bundle ->
+            if (requestKey !== RecipeEditorFragment.REQUEST_KEY) return@setFragmentResultListener
+            val newRecipe = bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_FOR_ADD_NEW_RECIPE)
+            if (newRecipe != null)
+                viewModel.addRecipe(newRecipe)
+        }
+
         val adapter = RecipeListAdapter(viewModel)
 
         binding.recipeRecyclerView.adapter = adapter
@@ -57,6 +57,11 @@ class RecipeListFragment : Fragment() {
         viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
             val myId = 2 //todo get real user id
             var recipes = recipeList
+
+            //initial state
+            if (recipeList.isEmpty()) binding.noResults.visibility = View.VISIBLE
+            else binding.noResults.visibility = View.GONE
+
             when (binding.bottomNavigation.selectedItemId) {
                 R.id.all_recipes -> {
                     adapter.submitList(recipes)
@@ -72,7 +77,10 @@ class RecipeListFragment : Fragment() {
                     adapter.submitList(recipes)
                     if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
                 }
-                else -> adapter.submitList(recipeList)
+                else -> {
+                    adapter.submitList(recipeList)
+                    binding.noResults.visibility = View.GONE
+                }
             }
         }
 
@@ -116,8 +124,7 @@ class RecipeListFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
-        val bottomNavigationView =
-            activity?.findViewById(R.id.bottomNavigation) as BottomNavigationView
+        val bottomNavigationView = activity?.findViewById(R.id.bottomNavigation) as BottomNavigationView
         with(menu) {
             findItem(R.id.edit_button).isVisible = false
             findItem(R.id.delete_button).isVisible = false

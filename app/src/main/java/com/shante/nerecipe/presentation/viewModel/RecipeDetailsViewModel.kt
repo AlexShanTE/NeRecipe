@@ -21,7 +21,7 @@ class RecipeDetailsViewModel(
 
     val recipeList = getRecipeListUseCase.getRecipeList()
 
-    val navigateToRecipeEditorScreen = SingleLiveEvent<Recipe>()
+    val navigateToRecipeEditorScreen = SingleLiveEvent<Recipe?>()
 
      fun deleteRecipe(recipe: Recipe) {
         deleteRecipeItemUseCase.deleteRecipe(recipe)

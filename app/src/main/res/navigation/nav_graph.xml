@@ -11,10 +11,12 @@
         tools:layout="@layout/recipe_list_fragment">
         <action
             android:id="@+id/to_recipeDetailsFragment"
-            app:destination="@id/recipeDetailsFragment" />
+            app:destination="@id/recipeDetailsFragment"
+            />
         <action
-            android:id="@+id/to_recipeConstructorFragment"
-            app:destination="@id/recipeEditorFragment" />
+            android:id="@+id/to_recipeEditorFragment"
+            app:destination="@id/recipeEditorFragment"
+            />
     </fragment>
 
     <fragment
@@ -26,8 +28,10 @@
             android:name="recipeId"
             app:argType="integer" />
         <action
-            android:id="@+id/to_recipeConstructorFragment"
-            app:destination="@id/recipeEditorFragment" />
+            android:id="@+id/to_recipeEditorFragment"
+            app:destination="@id/recipeEditorFragment"
+
+            />
     </fragment>
 
     <fragment
@@ -35,14 +39,14 @@
         android:name="com.shante.nerecipe.presentation.ui.RecipeEditorFragment"
         android:label="RecipeEditor"
         tools:layout="@layout/recipe_editor_fragment">
-
         <argument
             android:name="recipe"
             app:argType="com.shante.nerecipe.domain.Recipe"
             app:nullable="true" />
         <action
             android:id="@+id/to_cookingStepEditorFragment"
-            app:destination="@id/cookingStepEditorFragment" />
+            app:destination="@id/cookingStepEditorFragment"
+            />
     </fragment>
 
     <fragment

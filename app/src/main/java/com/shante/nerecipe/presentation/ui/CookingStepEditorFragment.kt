@@ -89,7 +89,7 @@ class CookingStepEditorFragment : Fragment() {
                          ecли selectedCookingStepImageUri не null то загрузить на сервер и передать ссылку
                          selectedImg обнулить
                     */
-                    stepImageURL = null,
+                    stepImageURL = args.value.cookingStep?.stepImageURL,
                     id = args.value.cookingStep?.id ?: -1
                 )
                 cookingStepService.addCookingStep(step)

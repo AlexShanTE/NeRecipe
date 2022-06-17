@@ -38,7 +38,8 @@ class RecipeListViewModel(
     override fun onSearchClicked(request: String) = repository.findRecipeByRequest(request)
 
     override fun onAddClicked() {
-        navigateToRecipeEditorScreen.call()
+        navigateToRecipeEditorScreen.value = null
+//        navigateToRecipeEditorScreen.call()
     }
     override fun onCancelClicked() = repository.findRecipeByRequest(RecipeListRepository.CANCEL_SEARCH_REQUEST)
 

@@ -1,8 +1,6 @@
 package com.shante.nerecipe.presentation.adapters.constructorScreen
 
-import com.shante.nerecipe.data.InMemoryRecipeListRepositoryImpl
 import com.shante.nerecipe.domain.Ingredient
-import com.shante.nerecipe.domain.Recipe
 import java.util.*
 
 typealias  IngredientListener = (ingredients: List<Ingredient>) -> Unit
@@ -19,8 +17,8 @@ object IngredientService {
         return ingredients
     }
 
-    fun setIngredientsList(ingredientList: List<Ingredient>) {
-        ingredients = ingredientList as MutableList<Ingredient>
+    fun setIngredientsList(ingredientList: MutableList<Ingredient>) {
+        ingredients = ingredientList
     }
 
     fun deleteIngredient(ingredient: Ingredient) {
