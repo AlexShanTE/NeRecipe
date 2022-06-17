@@ -1,18 +1,18 @@
-package com.shante.nerecipe.presentation.adapters
+package com.shante.nerecipe.presentation.adapters.detailsScreen
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.CookingStepItemBinding
-import com.shante.nerecipe.databinding.IngredientsItemBinding
 import com.shante.nerecipe.domain.CookingStep
-import com.shante.nerecipe.domain.Ingredient
 
-class RecipeCookingStepsAdapter :
-    ListAdapter<CookingStep, RecipeCookingStepsAdapter.CookingStepsViewHolder>(DiffCallBackCookingSteps) {
+class RecipeDetailsCookingInstructionAdapter :
+    ListAdapter<CookingStep, RecipeDetailsCookingInstructionAdapter.CookingStepsViewHolder>(
+        DiffCallBackCookingSteps
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CookingStepsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -34,7 +34,11 @@ class RecipeCookingStepsAdapter :
             this.cookingStep = cookingStep
             with(binding) {
                 cookingStepDescription.text = cookingStep.description
-                step.text = "Step ${cookingStep.id + 1}"
+                step.text = "Step ${adapterPosition + 1}"
+                if (cookingStep.uri == null) {
+                    stepPreview.visibility = View.GONE
+                } //TODO else steppreview load image
+                cookingStepOptionsButton.visibility = View.GONE
             }
         }
     }

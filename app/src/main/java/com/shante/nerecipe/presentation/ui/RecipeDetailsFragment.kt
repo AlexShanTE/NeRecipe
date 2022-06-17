@@ -4,28 +4,40 @@ import android.os.Bundle
 import android.view.*
 import android.widget.EditText
 import androidx.activity.addCallback
-import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shante.nerecipe.R
-import com.shante.nerecipe.databinding.FeedFragmentBinding
 import com.shante.nerecipe.databinding.RecipeDetailsFragmentBinding
-import com.shante.nerecipe.presentation.adapters.RecipeCookingStepsAdapter
-import com.shante.nerecipe.presentation.adapters.RecipeIngredientsAdapter
+import com.shante.nerecipe.domain.Recipe
+import com.shante.nerecipe.presentation.adapters.detailsScreen.RecipeDetailsCookingInstructionAdapter
+import com.shante.nerecipe.presentation.adapters.detailsScreen.RecipeDetailsIngredientsAdapter
 import com.shante.nerecipe.presentation.viewModel.RecipeDetailsViewModel
 
 class RecipeDetailsFragment : Fragment() {
 
     private val viewModel: RecipeDetailsViewModel by viewModels()
-    private val args by navArgs<RecipeDetailsFragmentArgs>()
-
+    private val args by navArgs<RecipeDetailsFragmentArgs>()  // recipe id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        setFragmentResultListener(requestKey = RecipeEditorFragment.REQUEST_KEY) { requestKey, bundle ->
+            if (requestKey !== RecipeEditorFragment.REQUEST_KEY) return@setFragmentResultListener
+            val recipe =
+                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_FOR_ADD_NEW_RECIPE)
+            if (recipe != null)
+                viewModel.editRecipe(recipe)
+        }
+
+        viewModel.navigateToRecipeEditorScreen.observe(this) { recipe ->
+            val direction = RecipeDetailsFragmentDirections.toRecipeConstructorFragment(recipe)
+            findNavController().navigate(direction)
+        }
+
     }
 
     override fun onCreateView(
@@ -37,20 +49,23 @@ class RecipeDetailsFragment : Fragment() {
         val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
 
         //TODO обработать OnBackPress , чтоб сворачивало инфо об ингредиентах и инструкцию по приготовлению
-        //Callback for backPressed
+//        Callback for backPressed
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (toolBarEditText.text.isNotEmpty()) toolBarEditText.visibility = View.VISIBLE
-                findNavController().popBackStack()
+            findNavController().popBackStack()
         }
 
         viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
             val recipe = recipeList.find { it.id == args.recipeId } ?: return@observe
             with(binding) {
-//                recipeItemPreview.recipePreview = recipe.
                 recipeItemPreview.author.text = recipe.author
                 recipeItemPreview.title.text = recipe.title
-                recipeItemPreview.category.text = recipe.category
-                recipeItemPreview.cookingTime.text = recipe.cookingTime
+                if (recipe.kitchenCategory == "Undefined category") { //todo придумать что то с категорией
+                    recipeItemPreview.kitchenCategory.visibility = View.GONE
+                } else recipeItemPreview.kitchenCategory.text = recipe.kitchenCategory
+                if (recipe.cookingTime == null) {
+                    recipeItemPreview.cookingTime.visibility = View.GONE
+                } else recipeItemPreview.cookingTime.text = recipe.cookingTime
                 recipeItemPreview.favoriteButton.setImageResource(
                     when (recipe.isFavorite) {
                         true -> R.drawable.ic_star_24
@@ -59,17 +74,16 @@ class RecipeDetailsFragment : Fragment() {
                 )
 
                 // region Ingredients List
-                val ingredientsAdapter = RecipeIngredientsAdapter()
+                val ingredientsAdapter = RecipeDetailsIngredientsAdapter()
                 binding.ingredientsList.adapter = ingredientsAdapter
                 ingredientsAdapter.submitList(recipe.ingredientsList)
                 // endregion Ingredients List
 
                 // region Cooking Steps List
-                val cookingStepsAdapter = RecipeCookingStepsAdapter()
+                val cookingStepsAdapter = RecipeDetailsCookingInstructionAdapter()
                 binding.cookingInstructionList.adapter = cookingStepsAdapter
-                cookingStepsAdapter.submitList(recipe.cookingStepsList)
+                cookingStepsAdapter.submitList(recipe.cookingInstructionList)
                 // endregion Cooking Steps List
-
 
                 when (recipe.isIngredientsShowed) {
                     true -> {
@@ -104,7 +118,6 @@ class RecipeDetailsFragment : Fragment() {
                 recipeItemPreview.favoriteButton.setOnClickListener {
                     viewModel.onFavoriteClicked(recipe)
                 }
-
             }
         }
 
@@ -112,7 +125,6 @@ class RecipeDetailsFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar_menu, menu)
-//        ActivityMainBinding.inflate(layoutInflater).toolBarEditText.visibility = View.GONE
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -120,16 +132,43 @@ class RecipeDetailsFragment : Fragment() {
         toolBarEditText.visibility = View.GONE
         super.onPrepareOptionsMenu(menu)
         with(menu) {
-            findItem(R.id.add_button).isVisible = false
-            findItem(R.id.edit_button).isVisible = true
-            findItem(R.id.cancel_button).isVisible = false
-            findItem(R.id.delete_button).isVisible = true
             findItem(R.id.search_button).isVisible = false
             findItem(R.id.filter_button).isVisible = false
+            findItem(R.id.cancel_button).isVisible = false
+            findItem(R.id.add_button).isVisible = false
+            findItem(R.id.ok_button).isVisible = false
+            val myId = 2 //TODO get my id to show corrected list
+            val recipe = viewModel.recipeList.value?.find { it.id == args.recipeId }
+                when (recipe?.authorId) {
+                    myId -> {
+                        findItem(R.id.edit_button).isVisible = true
+                        findItem(R.id.delete_button).isVisible = true
+                    }
+                    else -> {
+                        findItem(R.id.edit_button).isVisible = false
+                        findItem(R.id.delete_button).isVisible = false
+                    }
+                }
+            }
         }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_button -> {
+                val recipe = viewModel.recipeList.value?.find { it.id == args.recipeId } ?: return true
+                viewModel.onDeleteClicked(recipe)
+                findNavController().popBackStack()
+                true
+            }
+            R.id.edit_button -> {
+                val recipe = viewModel.recipeList.value?.find { it.id == args.recipeId } ?: return true
+                viewModel.onEditClicked(recipe)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
-
 }
+
 

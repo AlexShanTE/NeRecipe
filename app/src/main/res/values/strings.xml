@@ -5,6 +5,10 @@
     <string name="recipe_list">Recipe list</string>
     <string name="recipe_details">Recipe details</string>
 
+    <!-- Ingredient constructor fragment -->
+    <string name="ingredient_name">Ingredient</string>
+    <string name="ingredient_value">Value</string>
+
     <!-- Top app bar menu -->
     <string name="search">Search</string>
     <string name="filter">Filter</string>
@@ -12,19 +16,37 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
-
     <string name="top_bar_search_hint">Recipe name</string>
-
-
 
     <!-- Bottom menu -->
     <string name="all_recipes">Recipes</string>
     <string name="my_recipes">My recipes</string>
     <string name="favorite">Favorite</string>
 
+    <!-- Ingredients and cooking instruction list menu -->
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
+    <string name="delete_item">Delete</string>
+    <string name="edit_item">Edit</string>
+
+    <!-- Kitchen category menu  -->
+    <string name="europian">European</string>
+    <string name="asian">Asian</string>
+    <string name="pan_asian">Pan-Asian</string>
+    <string name="eastern">Eastern</string>
+    <string name="american">American</string>
+    <string name="russian">Russian</string>
+    <string name="mediterranean">Mediterranean</string>
+    <string name="undefined_category">Undefined category</string>
 
 
+
+    <string name="step">Step %1$d </string>
     <string name="add_recipe">Add recipe</string>
+    <string name="add_ingredient">Add ingredient</string>
+    <string name="save_ingredient">Save ingredient</string>
+    <string name="add_cooking_step">Add cooking step</string>
     <string name="show_ingredients">Show ingredients</string>
     <string name="cooking_instruction">Cooking instruction</string>
+    <string name="ok">OK</string>
 </resources>

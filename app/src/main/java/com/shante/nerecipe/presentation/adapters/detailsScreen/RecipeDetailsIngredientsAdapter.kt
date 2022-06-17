@@ -1,6 +1,7 @@
-package com.shante.nerecipe.presentation.adapters
+package com.shante.nerecipe.presentation.adapters.detailsScreen
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.shante.nerecipe.databinding.IngredientsItemBinding
 import com.shante.nerecipe.domain.Ingredient
 
-class RecipeIngredientsAdapter :
-    ListAdapter<Ingredient, RecipeIngredientsAdapter.IngredientViewHolder>(DiffCallBackIngredient) {
+class RecipeDetailsIngredientsAdapter :
+    ListAdapter<Ingredient, RecipeDetailsIngredientsAdapter.IngredientViewHolder>(
+        DiffCallBackIngredient
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,9 +33,9 @@ class RecipeIngredientsAdapter :
         fun bind(ingredient: Ingredient) {
             this.ingredient = ingredient
             with(binding) {
-                ingredientNumber.text = "${ingredient.id + 1}. "
                 ingredientTitle.text = ingredient.title
                 ingredientValue.text = ingredient.value
+                ingredientOptionsButton.visibility = View.GONE
             }
         }
     }
