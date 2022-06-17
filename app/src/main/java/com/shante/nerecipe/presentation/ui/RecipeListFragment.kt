@@ -55,31 +55,52 @@ class RecipeListFragment : Fragment() {
         binding.recipeRecyclerView.adapter = adapter
 
         viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
-            val myId = 2
+            val myId = 2 //todo get real user id
+            var recipes = recipeList
             when (binding.bottomNavigation.selectedItemId) {
-                R.id.all_recipes -> adapter.submitList(recipeList)
-                R.id.my_recipes -> adapter.submitList(recipeList.filter { it.authorId == myId })
-                R.id.favorite_recipes -> adapter.submitList(recipeList.filter { it.isFavorite })
+                R.id.all_recipes -> {
+                    adapter.submitList(recipes)
+                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
+                }
+                R.id.my_recipes -> {
+                    recipes = recipeList.filter { it.authorId == myId }
+                    adapter.submitList(recipes)
+                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
+                }
+                R.id.favorite_recipes -> {
+                    recipes= recipeList.filter { it.isFavorite  }
+                    adapter.submitList(recipes)
+                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
+                }
                 else -> adapter.submitList(recipeList)
             }
         }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
+            var recipeList = viewModel.recipeList.value
             when (item.itemId) {
                 R.id.all_recipes -> {
                     requireActivity().invalidateOptionsMenu()
+                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
+                    else binding.noResults.visibility = View.GONE
                     adapter.submitList(viewModel.recipeList.value)
                     return@setOnItemSelectedListener true
                 }
                 R.id.my_recipes -> {
                     requireActivity().invalidateOptionsMenu()
                     val myId = 2 //TODO get my id to show corrected list
-                    adapter.submitList(viewModel.recipeList.value?.filter { it.authorId == myId })
+                    recipeList = viewModel.recipeList.value?.filter { it.authorId == myId }
+                    adapter.submitList(recipeList)
+                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
+                    else binding.noResults.visibility = View.GONE
                     return@setOnItemSelectedListener true
                 }
                 R.id.favorite_recipes -> {
                     requireActivity().invalidateOptionsMenu()
-                    adapter.submitList(viewModel.recipeList.value?.filter { it.isFavorite })
+                    recipeList = viewModel.recipeList.value?.filter { it.isFavorite }
+                    adapter.submitList(recipeList)
+                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
+                    else binding.noResults.visibility = View.GONE
                     return@setOnItemSelectedListener true
                 }
             }
@@ -112,11 +133,11 @@ class RecipeListFragment : Fragment() {
             when (toolBarEditText.visibility) {
                 View.VISIBLE -> {
                     findItem(R.id.filter_button).isVisible = false
-                    findItem(R.id.cancel_button).isVisible = true
+                    findItem(R.id.preview_clear_button).isVisible = true
                 }
                 View.GONE, View.INVISIBLE -> {
                     findItem(R.id.filter_button).isVisible = true
-                    findItem(R.id.cancel_button).isVisible = false
+                    findItem(R.id.preview_clear_button).isVisible = false
                 }
             }
         }
@@ -143,7 +164,7 @@ class RecipeListFragment : Fragment() {
                 }
                 true
             }
-            R.id.cancel_button -> {
+            R.id.preview_clear_button -> {
                 toolBarEditText.text.clear()
                 toolBarEditText.visibility = View.GONE
                 viewModel.onCancelClicked()

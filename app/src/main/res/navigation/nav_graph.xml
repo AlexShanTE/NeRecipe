@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/recipeListFragment"
         android:name="com.shante.nerecipe.presentation.ui.RecipeListFragment"
-        android:label="RecipeListFragment"
+        android:label="RecipeList"
         tools:layout="@layout/recipe_list_fragment">
         <action
             android:id="@+id/to_recipeDetailsFragment"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/recipeDetailsFragment"
         android:name="com.shante.nerecipe.presentation.ui.RecipeDetailsFragment"
-        android:label="RecipeDetailsFragment"
+        android:label="RecipeDetails"
         tools:layout="@layout/recipe_details_fragment">
         <argument
             android:name="recipeId"
@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/recipeEditorFragment"
         android:name="com.shante.nerecipe.presentation.ui.RecipeEditorFragment"
-        android:label="RecipeConstructorFragment"
+        android:label="RecipeEditor"
         tools:layout="@layout/recipe_editor_fragment">
 
         <argument
@@ -48,7 +48,7 @@
     <fragment
         android:id="@+id/cookingStepEditorFragment"
         android:name="com.shante.nerecipe.presentation.ui.CookingStepEditorFragment"
-        android:label="CookingStepEditorFragment"
+        android:label="CookingStepEditor"
         tools:layout="@layout/cooking_step_editor"
         >
         <argument

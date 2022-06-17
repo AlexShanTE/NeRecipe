@@ -13,7 +13,7 @@
 
     <!-- element sizes -->
     <dimen name="recipe_preview_height">240dp</dimen>
-    <dimen name="step_preview_height">180dp</dimen>
+    <dimen name="step_preview_height">240dp</dimen>
     <dimen name="cooking_time_view_size">72dp</dimen>
     <dimen name="favorite_icon_size">48dp</dimen>
     <dimen name="fab_button_size">40dp</dimen>

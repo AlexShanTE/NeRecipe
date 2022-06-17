@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.CookingStepItemBinding
 import com.shante.nerecipe.domain.CookingStep
 
@@ -35,9 +37,16 @@ class RecipeDetailsCookingInstructionAdapter :
             with(binding) {
                 cookingStepDescription.text = cookingStep.description
                 step.text = "Step ${adapterPosition + 1}"
-                if (cookingStep.uri == null) {
+                if (cookingStep.stepImageURL == null) {
                     stepPreview.visibility = View.GONE
-                } //TODO else steppreview load image
+                } else {
+                    stepPreview.visibility = View.VISIBLE
+                    Glide.with(binding.stepPreview)
+                            .asDrawable()
+                            .load(cookingStep.stepImageURL)
+                            .error(R.mipmap.ic_launcher)
+                            .into(binding.stepPreview)
+                    }
                 cookingStepOptionsButton.visibility = View.GONE
             }
         }
