@@ -6,13 +6,14 @@ import com.shante.nerecipe.domain.CookingStep
 import com.shante.nerecipe.domain.Ingredient
 import com.shante.nerecipe.domain.Recipe
 import com.shante.nerecipe.domain.repository.RecipeListRepository
+import com.shante.nerecipe.utils.RecipeFilling
 import kotlin.random.Random
 
 object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
 
-    private const val GENERATED_RECIPE_AMOUNT = 5
-    private const val GENERATED_INGREDIENTS_AMOUNT = 5
-    private const val GENERATED_COOKING_STEPS_AMOUNT = 5
+    private const val GENERATED_RECIPE_AMOUNT = 10
+    private const val GENERATED_INGREDIENTS_AMOUNT = 3
+    private const val GENERATED_COOKING_STEPS_AMOUNT = 3
 
     private var id = 0
     private val data = MutableLiveData<List<Recipe>>()
@@ -25,8 +26,9 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
             val recipe = Recipe(
                 title = "Recipe №$i",
                 author = "Me",
-                category = "Russian food",
-                cookingTime = "1h\n45min",
+                authorId = Random.nextInt(1, 5),
+                kitchenCategory = RecipeFilling.getRandomKitchenCategory(),
+                cookingTime = "1h",
                 ingredientsList =
                 List(GENERATED_INGREDIENTS_AMOUNT) {
                     Ingredient(
@@ -35,9 +37,9 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
                         it
                     )
                 },
-                cookingStepsList =
+                cookingInstructionList =
                 List(GENERATED_COOKING_STEPS_AMOUNT) {
-                    CookingStep("Description $it", it)
+                    CookingStep("Description $it", null,  it)
                 }
             )
             addRecipe(recipe)
@@ -119,6 +121,5 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
         else
             data.value = recipeList.toList()
     }
-
 
 }

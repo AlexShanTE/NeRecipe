@@ -4,46 +4,49 @@
 
     <item
         android:id="@+id/search_button"
+        android:contentDescription="@string/search"
         android:icon="@drawable/ic_search"
         android:title="@string/search"
-        android:contentDescription="@string/search"
-        app:showAsAction = "ifRoom"
-        />
-
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/add_button"
+        android:contentDescription="@string/add"
+        android:icon="@drawable/ic_add"
+        android:title="@string/add"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/filter_button"
+        android:contentDescription="@string/filter"
         android:icon="@drawable/ic_filter"
         android:title="@string/filter"
-        android:contentDescription="@string/filter"
+        app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/edit_button"
+        android:contentDescription="@string/edit"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/edit"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/delete_button"
+        android:contentDescription="@string/delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/add_button"
-        android:icon="@drawable/ic_add_24"
-        android:title="@string/add"
-        android:contentDescription="@string/add"
-        app:showAsAction="ifRoom"
-        />
-    <item
-        android:id="@+id/edit_button"
-        android:icon="@drawable/ic_edit"
-        android:title="@string/edit"
-        android:contentDescription="@string/edit"
-        app:showAsAction="ifRoom"
-        />
-    <item
-        android:id="@+id/delete_button"
-        android:icon="@drawable/ic_delete"
-        android:title="@string/delete"
-        android:contentDescription="@string/delete"
-        app:showAsAction="ifRoom"
-        />
+        android:id="@+id/ok_button"
+        android:contentDescription="@string/cancel"
+        android:icon="@drawable/ic_ok_circle"
+        android:title="@string/cancel"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/cancel_button"
+        android:contentDescription="@string/cancel"
         android:icon="@drawable/ic_cancel"
         android:title="@string/cancel"
-        android:contentDescription="@string/cancel"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
 
 </menu>

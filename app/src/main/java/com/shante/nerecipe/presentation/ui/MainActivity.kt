@@ -37,9 +37,6 @@ class MainActivity : AppCompatActivity() {
     private val destinationListener =
         NavController.OnDestinationChangedListener { _, destination, _ ->
             supportActionBar?.title = destination.label
-            if (destination.label == "RecipeListFragment"){
-//                binding.toolBarEditText.visibility = View.GONE
-            }
         }
 
     private fun onNavControllerActivated(navController: NavController) {

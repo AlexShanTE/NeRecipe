@@ -1,6 +1,7 @@
 package com.shante.nerecipe.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -32,10 +33,8 @@ class RecipeListAdapter(
         private lateinit var recipe: Recipe
 
         init {
-            itemView.setOnClickListener {
-                listener.onRecipeItemClicked(recipe)
-            }
-            binding.favoriteButton.setOnClickListener{listener.onFavoriteClicked(recipe)}
+            itemView.setOnClickListener { listener.onRecipeItemClicked(recipe) }
+            binding.favoriteButton.setOnClickListener { listener.onFavoriteClicked(recipe) }
         }
 
         fun bind(recipe: Recipe) {
@@ -43,9 +42,14 @@ class RecipeListAdapter(
             with(binding) {
                 author.text = recipe.author
                 title.text = recipe.title
-                category.text = recipe.category
-                cookingTime.text = recipe.cookingTime
-                recipePreview.setImageResource(R.mipmap.ic_food)
+                recipePreview.setImageResource(R.mipmap.ic_food) //TODO download img
+                if (recipe.kitchenCategory == "Undefined category") { //todo придумать что то с категорией
+                    kitchenCategory.visibility = View.GONE
+                } else kitchenCategory.text = recipe.kitchenCategory
+                if (recipe.cookingTime == null) {
+                    cookingTime.visibility = View.GONE
+                } else cookingTime.text = recipe.cookingTime
+
                 when (recipe.isFavorite) {
                     true -> favoriteButton.setImageResource(R.drawable.ic_star_24)
                     false -> favoriteButton.setImageResource(R.drawable.ic_star_border_24)

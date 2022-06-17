@@ -10,4 +10,8 @@ interface RecipeDetailsInteractionListener {
 
     fun onCookStepsShowClicked(recipe: Recipe)
 
+    fun onDeleteClicked(recipe: Recipe)
+
+    fun onEditClicked(recipe: Recipe)
+
 }

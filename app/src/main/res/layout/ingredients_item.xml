@@ -11,29 +11,21 @@
     android:layout_margin="1dp"
     >
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/ingredientNumber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:textColor="@color/white"
-        android:textSize="@dimen/base_text_size"
-        android:layout_margin="@dimen/base_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="1. " />
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ingredientTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:ellipsize="end"
+        android:gravity="center_vertical"
         android:textColor="@color/white"
+        android:paddingStart="@dimen/addition_padding"
+        android:paddingEnd="0dp"
         android:textSize="@dimen/base_text_size"
-        app:layout_constraintEnd_toStartOf="@id/ingredientValue"
-        app:layout_constraintStart_toEndOf="@id/ingredientNumber"
-        app:layout_constraintTop_toTopOf="@id/ingredientNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="ingredient" />
 
 
@@ -41,15 +33,30 @@
         android:id="@+id/ingredientValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/base_margin"
+        android:paddingEnd="@dimen/addition_padding"
+        android:paddingStart="@dimen/addition_padding"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/white"
         android:textSize="@dimen/base_text_size"
-        app:layout_constraintBottom_toBottomOf="@id/ingredientNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ingredientNumber"
+        app:layout_constraintBottom_toBottomOf="@id/ingredientTitle"
+        app:layout_constraintEnd_toStartOf="@id/ingredient_options_button"
+        app:layout_constraintTop_toTopOf="@id/ingredientTitle"
         tools:text="value" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ingredient_options_button"
+        style="@style/Widget.AppTheme.IngredientsOptions.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:checkable="false"
+        app:icon="@drawable/ic_option_button"
+        app:iconGravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

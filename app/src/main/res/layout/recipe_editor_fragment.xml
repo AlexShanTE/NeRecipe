@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/base_padding">
+
+        <ImageView
+            android:id="@+id/recipe_preview"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recipe_preview_height"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/add_preview"
+            android:layout_width="@dimen/base_constructor_icon_size"
+            android:layout_height="@dimen/base_constructor_icon_size"
+            android:layout_margin="@dimen/base_margin"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_add_circle"
+            app:layout_constraintEnd_toStartOf="@id/cancel_button"
+            app:layout_constraintTop_toTopOf="@id/recipe_preview" />
+
+        <ImageButton
+            android:id="@+id/cancel_button"
+            android:layout_width="@dimen/base_constructor_icon_size"
+            android:layout_height="@dimen/base_constructor_icon_size"
+            android:layout_margin="@dimen/base_margin"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_cancel_edit"
+            app:layout_constraintEnd_toEndOf="@id/recipe_preview"
+            app:layout_constraintTop_toTopOf="@id/recipe_preview" />
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/addition_margin"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:hint="Title"
+            android:singleLine="true"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipe_preview" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cooking_time"
+            android:layout_marginTop="@dimen/addition_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cooking time (optional)"
+            android:textSize="@dimen/addition_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <EditText
+            android:id="@+id/cooking_time_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:hint="hours"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/cooking_time"
+            app:layout_constraintEnd_toStartOf="@id/cooking_time_minutes"
+            app:layout_constraintStart_toEndOf="@id/cooking_time"
+            app:layout_constraintTop_toTopOf="@id/cooking_time" />
+
+        <EditText
+            android:id="@+id/cooking_time_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:hint="minutes"
+            android:maxLines="1"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/cooking_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cooking_time_hours"
+            app:layout_constraintTop_toTopOf="@id/cooking_time" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/kitchen_category"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/addition_margin"
+            android:layout_height="wrap_content"
+            android:text="Kitchen category :"
+            android:textSize="@dimen/addition_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cooking_time" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/kitchen_category_title"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/addition_margin"
+            android:layout_height="wrap_content"
+            android:text="@string/undefined_category"
+            android:textSize="@dimen/addition_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/kitchen_category" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/kitchen_category_button"
+            style="@style/Widget.AppTheme.IngredientsOptions.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="false"
+            app:icon="@drawable/ic_arrow_drop_down"
+            app:iconSize="@dimen/base_constructor_icon_size"
+            android:background="@android:color/transparent"
+            app:iconTint="@color/black"
+            app:iconGravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/kitchen_category_title"
+            app:layout_constraintBottom_toBottomOf="@id/kitchen_category_title"
+            app:layout_constraintTop_toBottomOf="@id/kitchen_category_title"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ingredientsList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/addition_margin"
+            android:padding="@dimen/base_padding"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/kitchen_category_title"
+            tools:itemCount="2"
+            tools:listitem="@layout/ingredients_item" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/ingredientEditGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="newIngredientNameEditText
+            ,newIngredientValueEditText, cancel_edit_ingredient_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ingredientsList"
+            />
+
+        <EditText
+            android:id="@+id/newIngredientNameEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:hint="@string/ingredient_name"
+            android:singleLine="true"
+            android:textSize="@dimen/addition_text_size"
+            app:layout_constraintBottom_toTopOf="@id/add_ingredient_button"
+            app:layout_constraintEnd_toStartOf="@+id/newIngredientValueEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ingredientsList"
+            tools:text="Куриные крылышки в маринаде dasdasdasddasdasdasasd" />
+
+        <EditText
+            android:id="@+id/newIngredientValueEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/ingredient_value"
+            android:singleLine="true"
+            android:textSize="@dimen/addition_text_size"
+            app:layout_constraintBottom_toBottomOf="@id/newIngredientNameEditText"
+            app:layout_constraintEnd_toStartOf="@id/cancel_edit_ingredient_button"
+            app:layout_constraintStart_toEndOf="@id/newIngredientNameEditText"
+            app:layout_constraintTop_toTopOf="@id/newIngredientNameEditText"
+            tools:text="1 pound" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/cancel_edit_ingredient_button"
+            android:layout_width="@dimen/base_constructor_icon_size"
+            android:layout_height="@dimen/base_constructor_icon_size"
+            android:backgroundTint="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_cancel_edit"
+            app:layout_constraintBottom_toBottomOf="@id/newIngredientValueEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/newIngredientValueEditText"
+            app:layout_constraintTop_toTopOf="@id/newIngredientValueEditText" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_ingredient_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_ingredient"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newIngredientNameEditText" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cookingInstructionList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_ingredient_button"
+            tools:itemCount="1"
+            tools:listitem="@layout/cooking_step_item" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_cooking_step_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_cooking_step"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cookingInstructionList" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+

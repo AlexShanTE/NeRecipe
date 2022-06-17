@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe_preview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/recipe_preview"
-    android:padding="@dimen/base_padding"
-    >
+    android:padding="@dimen/base_padding">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/recipePreview"
@@ -18,7 +17,7 @@
         tools:src="@tools:sample/avatars" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/category"
+        android:id="@+id/kitchen_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/base_margin"
@@ -40,7 +39,7 @@
         android:layout_margin="@dimen/base_margin"
         android:background="@drawable/circle"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="center_vertical|center_horizontal"
         android:maxLines="2"
         android:textColor="@color/text_main_color"
         android:textSize="@dimen/preview_cooking_time_size"
