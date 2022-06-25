@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.shante.nerecipe.data.InMemoryRecipeListRepositoryImpl
 import com.shante.nerecipe.domain.*
 import com.shante.nerecipe.domain.useCases.*
-import com.shante.nerecipe.presentation.adapters.iInteractionListeners.RecipeDetailsInteractionListener
+import com.shante.nerecipe.presentation.adapters.interactionListeners.RecipeDetailsInteractionListener
 import com.shante.nerecipe.utils.SingleLiveEvent
 
 class RecipeDetailsViewModel(
@@ -32,10 +32,6 @@ class RecipeDetailsViewModel(
     }
 
     override fun onFavoriteClicked(recipe: Recipe) = repository.favorite(recipe.id)
-
-    override fun onIngredientsShowClicked(recipe: Recipe) = repository.showIngredients(recipe)
-
-    override fun onCookStepsShowClicked(recipe: Recipe) = repository.showCookSteps(recipe)
 
     override fun onDeleteClicked(recipe: Recipe) {
         deleteRecipe(recipe)

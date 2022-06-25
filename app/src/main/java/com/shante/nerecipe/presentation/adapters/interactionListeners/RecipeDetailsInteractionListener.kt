@@ -1,14 +1,10 @@
-package com.shante.nerecipe.presentation.adapters.iInteractionListeners
+package com.shante.nerecipe.presentation.adapters.interactionListeners
 
 import com.shante.nerecipe.domain.Recipe
 
 interface RecipeDetailsInteractionListener {
 
     fun onFavoriteClicked(recipe: Recipe)
-
-    fun onIngredientsShowClicked(recipe: Recipe)
-
-    fun onCookStepsShowClicked(recipe: Recipe)
 
     fun onDeleteClicked(recipe: Recipe)
 

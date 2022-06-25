@@ -12,7 +12,6 @@
     >
 
 
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ingredientTitle"
         android:layout_width="wrap_content"
