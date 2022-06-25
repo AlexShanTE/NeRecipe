@@ -48,13 +48,13 @@ class CookingInstructionStepsAdapter(
             cookingStepOptionsButton.tag = cookingStep
             step.text = context.getString(R.string.step, position + 1)
             cookingStepDescription.text = cookingStep.description
-            if (cookingStep.stepImageURL == null) {
+            if (cookingStep.stepImageUri == null) {
                 stepPreview.visibility = View.GONE
             } else {
                 stepPreview.visibility = View.VISIBLE
                 Glide.with(holder.binding.stepPreview)
                     .asDrawable()
-                    .load(cookingStep.stepImageURL)
+                    .load(cookingStep.stepImageUri)
                     .error(R.drawable.ic_no_image)
                     .into(holder.binding.stepPreview)
             }

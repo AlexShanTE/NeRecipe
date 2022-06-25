@@ -1,6 +1,8 @@
 package com.shante.nerecipe.utils
 
+import android.net.Uri
 import com.shante.nerecipe.domain.Kitchen
+import java.net.URI
 import kotlin.random.Random
 
 object RecipeFilling {
@@ -9,27 +11,27 @@ object RecipeFilling {
         return Kitchen.selectedKitchenList.random().title
     }
 
-    fun setRandomImagePreview(): String? {
-        val imgUrl = listOf<String?>(
-            "https://wp-s.ru/wallpapers/5/0/458570834775326/blyudo-iz-lososya-s-kartofelem-i-svezhimi-ovoshhami.jpg",
-            "https://podruzke.ru/wp-content/uploads/2021/08/0-28.jpg",
-            "https://flytothesky.ru/wp-content/uploads/2018/11/636547.jpg",
-            "https://s1.1zoom.ru/b4652/504/The_second_dishes_Vienna_sausage_Potato_Wood_520555_2048x1152.jpg",
+    fun setRandomImagePreview(): Uri? {
+        val imgUriList = listOf<Uri?>(
+            Uri.parse("https://wp-s.ru/wallpapers/5/0/458570834775326/blyudo-iz-lososya-s-kartofelem-i-svezhimi-ovoshhami.jpg"),
+            Uri.parse("https://podruzke.ru/wp-content/uploads/2021/08/0-28.jpg"),
+            Uri.parse("https://flytothesky.ru/wp-content/uploads/2018/11/636547.jpg"),
+            Uri.parse("https://s1.1zoom.ru/b4652/504/The_second_dishes_Vienna_sausage_Potato_Wood_520555_2048x1152.jpg"),
             null
         )
-        val urlIndex = Random.nextInt(0, imgUrl.size)
-        return imgUrl[urlIndex]
+        val imgUriIndex = Random.nextInt(0, imgUriList.size)
+        return imgUriList[imgUriIndex]
     }
 
-    fun setRandomCookingStepImage(): String? {
-        val imgUrl = listOf<String?>(
-            "https://www.trn-news.ru/Ru/Upload/Image/food_egg-dish-of-italia_152K.jpg",
-            "https://www.kiy-v.ua/media/wysiwyg/720/GGM-Gastro-FTKY240_720.jpg",
-            "https://vinand.ru/media/i/lekue/0205500R14U150-lozhka-silikonovaia-tsvet-krasnyi-lekue-73340-2.jpg",
+    fun setRandomCookingStepImage(): Uri? {
+        val imgUriList = listOf<Uri?>(
+            Uri.parse("https://www.trn-news.ru/Ru/Upload/Image/food_egg-dish-of-italia_152K.jpg"),
+            Uri.parse("https://www.kiy-v.ua/media/wysiwyg/720/GGM-Gastro-FTKY240_720.jpg"),
+            Uri.parse("https://vinand.ru/media/i/lekue/0205500R14U150-lozhka-silikonovaia-tsvet-krasnyi-lekue-73340-2.jpg"),
             null
         )
-        val urlIndex = Random.nextInt(0, imgUrl.size)
-        return imgUrl[urlIndex]
+        val uriIndex = Random.nextInt(0, imgUriList.size)
+        return imgUriList[uriIndex]
     }
 
 }

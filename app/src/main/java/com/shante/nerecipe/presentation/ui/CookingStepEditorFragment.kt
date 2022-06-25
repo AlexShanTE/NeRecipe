@@ -30,6 +30,7 @@ class CookingStepEditorFragment : Fragment() {
     private val pickImage: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri: Uri ->
             selectedCookingStepImageUri = imageUri
+            imageCookingStepUri = imageUri
             view?.findViewById<ImageView>(R.id.step_preview)?.setImageURI(imageUri)
             view?.findViewById<ImageButton>(R.id.preview_add_button)?.visibility = View.GONE
             view?.findViewById<ImageButton>(R.id.clear_preview_button)?.visibility = View.VISIBLE
@@ -46,15 +47,17 @@ class CookingStepEditorFragment : Fragment() {
         if (args.value !== null) {
             val step = args.value.cookingStep
             binding.descriptionStepEditText.setText(step?.description)
-            if (step?.stepImageURL == null) {
+            if (step?.stepImageUri == null) {
+                binding.stepPreview.setImageResource(R.drawable.ic_no_image)
                 binding.previewAddButton.visibility = View.VISIBLE
                 binding.clearPreviewButton.visibility = View.GONE
             } else {
+                imageCookingStepPreviewTag = null
                 binding.previewAddButton.visibility = View.GONE
                 binding.clearPreviewButton.visibility = View.VISIBLE
                 Glide.with(binding.stepPreview)
                     .asDrawable()
-                    .load(step.stepImageURL)
+                    .load(step.stepImageUri)
                     .error(R.drawable.ic_no_image)
                     .into(binding.stepPreview)
             }
@@ -66,14 +69,20 @@ class CookingStepEditorFragment : Fragment() {
             binding.stepPreview.setImageResource(R.drawable.ic_no_image)
             binding.previewAddButton.visibility = View.VISIBLE
             binding.clearPreviewButton.visibility = View.GONE
+            imageCookingStepUri = null
+            imageCookingStepPreviewTag = imageCookingStepPreviewIsEmptyTag
         }
 
         binding.cancelButton.setOnClickListener {
+            imageCookingStepUri = null
+            imageCookingStepPreviewTag = null
             findNavController().popBackStack()
         }
 
         binding.cancelEditStepButton.setOnClickListener {
             binding.descriptionStepEditText.text?.clear()
+            imageCookingStepUri = null
+            imageCookingStepPreviewTag = null
         }
 
         binding.previewAddButton.setOnClickListener {
@@ -89,7 +98,12 @@ class CookingStepEditorFragment : Fragment() {
                          ecли selectedCookingStepImageUri не null то загрузить на сервер и передать ссылку
                          selectedImg обнулить
                     */
-                    stepImageURL = args.value.cookingStep?.stepImageURL,
+                    stepImageUri = when {
+                        imageCookingStepUri !== null -> imageCookingStepUri
+                        imageCookingStepPreviewTag== imageCookingStepPreviewIsEmptyTag -> null
+                        args.value.cookingStep?.stepImageUri !== null -> args.value.cookingStep?.stepImageUri
+                        else -> null
+                    },
                     id = args.value.cookingStep?.id ?: -1
                 )
                 cookingStepService.addCookingStep(step)
@@ -108,6 +122,9 @@ class CookingStepEditorFragment : Fragment() {
 
     companion object {
         const val MIMETYPE_IMAGES = "image/*"
+        var imageCookingStepUri: Uri? = null
+        var imageCookingStepPreviewTag : String? = null
+        const val imageCookingStepPreviewIsEmptyTag = "empty image preview"
     }
 
 

@@ -50,10 +50,10 @@ class RecipeListAdapter(
                 if (recipe.cookingTime == null) {
                     cookingTime.visibility = View.GONE
                 } else cookingTime.text = recipe.cookingTime
-                if (recipe.previewURL !== null) {
+                if (recipe.previewUri !== null) {
                     Glide.with(recipePreview)
                         .asDrawable()
-                        .load(recipe.previewURL)
+                        .load(recipe.previewUri)
                         .error(R.drawable.ic_no_image)
                         .into(recipePreview)
                 } else {

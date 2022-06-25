@@ -58,10 +58,10 @@ class RecipeDetailsFragment : Fragment() {
             with(binding) {
                 recipeItemPreview.author.text = recipe.author
                 recipeItemPreview.title.text = recipe.title
-                if (recipe.previewURL !== null) {
+                if (recipe.previewUri !== null) {
                     Glide.with(this@RecipeDetailsFragment)
                         .asDrawable()
-                        .load(recipe.previewURL)
+                        .load(recipe.previewUri)
                         .error(R.drawable.ic_no_image)
                         .into(recipeItemPreview.recipePreview)
                 } else {

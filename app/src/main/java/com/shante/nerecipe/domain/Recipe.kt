@@ -1,5 +1,6 @@
 package com.shante.nerecipe.domain
 
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -12,7 +13,7 @@ data class Recipe(
     val cookingTime: String?,
     val ingredientsList: List<Ingredient>,
     val cookingInstructionList: List<CookingStep>,
-    val previewURL: String? = null,
+    val previewUri: Uri? = null,
     val isIngredientsShowed:Boolean = false,
     val isCookingStepsShowed:Boolean = false,
     val isFavorite: Boolean = false,

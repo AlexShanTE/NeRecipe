@@ -9,7 +9,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipeListFragmentBinding
 import com.shante.nerecipe.domain.Kitchen

@@ -41,11 +41,11 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
                 List(GENERATED_COOKING_STEPS_AMOUNT) {
                     CookingStep(
                         description = "Description $it",
-                        stepImageURL = RecipeFilling.setRandomCookingStepImage(),
+                        stepImageUri = RecipeFilling.setRandomCookingStepImage(),
                         id = it
                     )
                 },
-                previewURL = RecipeFilling.setRandomImagePreview()
+                previewUri = RecipeFilling.setRandomImagePreview()
 
             )
             addRecipe(recipe)

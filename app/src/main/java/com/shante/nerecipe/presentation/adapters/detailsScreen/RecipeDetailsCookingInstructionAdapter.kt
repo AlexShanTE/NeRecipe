@@ -37,13 +37,13 @@ class RecipeDetailsCookingInstructionAdapter :
             with(binding) {
                 cookingStepDescription.text = cookingStep.description
                 step.text = "Step ${adapterPosition + 1}"
-                if (cookingStep.stepImageURL == null) {
+                if (cookingStep.stepImageUri == null) {
                     stepPreview.visibility = View.GONE
                 } else {
                     stepPreview.visibility = View.VISIBLE
                     Glide.with(binding.stepPreview)
                             .asDrawable()
-                            .load(cookingStep.stepImageURL)
+                            .load(cookingStep.stepImageUri)
                             .error(R.mipmap.ic_launcher)
                             .into(binding.stepPreview)
                     }
