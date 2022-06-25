@@ -1,6 +1,5 @@
-package com.shante.nerecipe.presentation.adapters.constructorScreen
+package com.shante.nerecipe.presentation.adapters.editorScreen
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,22 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.IngredientsItemBinding
 import com.shante.nerecipe.domain.Ingredient
+import com.shante.nerecipe.presentation.adapters.interactionListeners.IngredientInteractionListener
 
-
-interface IngredientActionListener {
-
-    fun onIngredientUp(ingredient: Ingredient, moveBy: Int)
-
-    fun onIngredientDown(ingredient: Ingredient, moveBy: Int)
-
-    fun onIngredientEdit(ingredient: Ingredient)
-
-    fun onIngredientDelete(ingredient: Ingredient)
-
-}
 
 class IngredientsAdapter(
-    private val ingredientActionListener: IngredientActionListener
+    private val ingredientInteractionListener: IngredientInteractionListener
 ) : RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>(), View.OnClickListener {
 
     var ingredients: List<Ingredient> = emptyList()
@@ -75,19 +63,19 @@ class IngredientsAdapter(
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.move_up -> {
-                        ingredientActionListener.onIngredientUp(ingredient, -1)
+                        ingredientInteractionListener.onIngredientUp(ingredient, -1)
                         true
                     }
                     R.id.move_down -> {
-                        ingredientActionListener.onIngredientDown(ingredient,1)
+                        ingredientInteractionListener.onIngredientDown(ingredient,1)
                         true
                     }
                     R.id.edit -> {
-                        ingredientActionListener.onIngredientEdit(ingredient)
+                        ingredientInteractionListener.onIngredientEdit(ingredient)
                         true
                     }
                     R.id.delete -> {
-                        ingredientActionListener.onIngredientDelete(ingredient)
+                        ingredientInteractionListener.onIngredientDelete(ingredient)
                         true
                     }
                     else -> false

@@ -1,4 +1,4 @@
-package com.shante.nerecipe.presentation.adapters.constructorScreen
+package com.shante.nerecipe.presentation.adapters.editorScreen
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,22 +10,12 @@ import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.CookingStepItemBinding
 import com.shante.nerecipe.domain.CookingStep
+import com.shante.nerecipe.presentation.adapters.interactionListeners.CookingStepsInteractionListener
 
-interface  CookingInstructionStepsActionListener {
-
-    fun onCookingStepUp(cookingStep: CookingStep, moveBy: Int)
-
-    fun onCookingStepDown(cookingStep: CookingStep, moveBy: Int)
-
-    fun onCookingStepEdit(cookingStep: CookingStep)
-
-    fun onCookingStepDelete(cookingStep: CookingStep)
-
-}
 
 class CookingInstructionStepsAdapter(
     val context: Context,
-    private val cookingInstructionStepsActionListener: CookingInstructionStepsActionListener
+    private val cookingStepsInteractionListener: CookingStepsInteractionListener
 ) : RecyclerView.Adapter<CookingInstructionStepsAdapter.CookingStepViewHolder>(), View.OnClickListener {
 
 
@@ -87,19 +77,19 @@ class CookingInstructionStepsAdapter(
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.move_up -> {
-                        cookingInstructionStepsActionListener.onCookingStepUp(cookingStep, -1)
+                        cookingStepsInteractionListener.onCookingStepUp(cookingStep, -1)
                         true
                     }
                     R.id.move_down -> {
-                        cookingInstructionStepsActionListener.onCookingStepDown(cookingStep,1)
+                        cookingStepsInteractionListener.onCookingStepDown(cookingStep,1)
                         true
                     }
                     R.id.edit -> {
-                        cookingInstructionStepsActionListener.onCookingStepEdit(cookingStep)
+                        cookingStepsInteractionListener.onCookingStepEdit(cookingStep)
                         true
                     }
                     R.id.delete -> {
-                        cookingInstructionStepsActionListener.onCookingStepDelete(cookingStep)
+                        cookingStepsInteractionListener.onCookingStepDelete(cookingStep)
                         true
                     }
                     else -> false

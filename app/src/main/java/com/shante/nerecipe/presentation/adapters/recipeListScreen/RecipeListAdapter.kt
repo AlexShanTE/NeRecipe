@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipePreviewItemBinding
+import com.shante.nerecipe.domain.Kitchen
 import com.shante.nerecipe.domain.Recipe
-import com.shante.nerecipe.presentation.adapters.iInteractionListeners.RecipeListInteractionListener
+import com.shante.nerecipe.presentation.adapters.interactionListeners.RecipeListInteractionListener
 
 class RecipeListAdapter(
     private val recipeInteractionListener: RecipeListInteractionListener
@@ -43,7 +44,7 @@ class RecipeListAdapter(
             with(binding) {
                 author.text = recipe.author
                 title.text = recipe.title
-                if (recipe.kitchenCategory == "Undefined category") { //todo придумать что то с категорией
+                if (recipe.kitchenCategory == Kitchen.selectedKitchenList.last().title) { //todo придумать что то с категорией
                     kitchenCategory.visibility = View.GONE
                 } else kitchenCategory.text = recipe.kitchenCategory
                 if (recipe.cookingTime == null) {

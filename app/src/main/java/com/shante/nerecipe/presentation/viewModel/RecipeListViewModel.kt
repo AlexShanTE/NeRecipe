@@ -6,7 +6,7 @@ import com.shante.nerecipe.data.InMemoryRecipeListRepositoryImpl
 import com.shante.nerecipe.domain.Recipe
 import com.shante.nerecipe.domain.repository.RecipeListRepository
 import com.shante.nerecipe.domain.useCases.*
-import com.shante.nerecipe.presentation.adapters.iInteractionListeners.RecipeListInteractionListener
+import com.shante.nerecipe.presentation.adapters.interactionListeners.RecipeListInteractionListener
 import com.shante.nerecipe.utils.SingleLiveEvent
 
 class RecipeListViewModel(

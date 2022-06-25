@@ -1,12 +1,12 @@
 package com.shante.nerecipe.utils
 
-import com.shante.nerecipe.domain.KitchenCategory
+import com.shante.nerecipe.domain.Kitchen
 import kotlin.random.Random
 
 object RecipeFilling {
 
     fun getRandomKitchenCategory(): String {
-        return KitchenCategory.kitchenCategory.random()
+        return Kitchen.selectedKitchenList.random().title
     }
 
     fun setRandomImagePreview(): String? {

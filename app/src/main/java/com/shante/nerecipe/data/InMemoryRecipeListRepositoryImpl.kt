@@ -92,20 +92,6 @@ object InMemoryRecipeListRepositoryImpl : RecipeListRepository {
         }
     }
 
-    override fun showIngredients(recipe: Recipe) {
-        recipeList.replaceAll {
-            if (it.id == recipe.id) it.copy(isIngredientsShowed = !it.isIngredientsShowed) else it
-        }
-        updateList(isSorted = false)
-    }
-
-    override fun showCookSteps(recipe: Recipe) {
-        recipeList.replaceAll {
-            if (it.id == recipe.id) it.copy(isCookingStepsShowed = !it.isCookingStepsShowed) else it
-        }
-        updateList(isSorted = false)
-    }
-
     override fun findRecipeByRequest(request: String) {
         if (request == RecipeListRepository.CANCEL_SEARCH_REQUEST) {
             sortedRecipeList.clear()

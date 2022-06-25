@@ -1,4 +1,4 @@
-package com.shante.nerecipe.presentation.adapters.constructorScreen
+package com.shante.nerecipe.presentation.adapters.editorScreen
 
 import com.shante.nerecipe.domain.Ingredient
 import java.util.*

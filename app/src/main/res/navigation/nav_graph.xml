@@ -17,6 +17,9 @@
             android:id="@+id/to_recipeEditorFragment"
             app:destination="@id/recipeEditorFragment"
             />
+        <action
+            android:id="@+id/to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -60,5 +63,11 @@
             app:argType="com.shante.nerecipe.domain.CookingStep"
             app:nullable="true" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.shante.nerecipe.presentation.ui.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings_fragment"
+        />
 
 </navigation>
