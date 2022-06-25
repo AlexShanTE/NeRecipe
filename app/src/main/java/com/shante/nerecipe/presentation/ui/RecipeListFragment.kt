@@ -9,8 +9,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipeListFragmentBinding
+import com.shante.nerecipe.domain.Kitchen
 import com.shante.nerecipe.domain.Recipe
 import com.shante.nerecipe.presentation.adapters.RecipeListAdapter
 import com.shante.nerecipe.presentation.viewModel.RecipeListViewModel
@@ -23,7 +25,6 @@ class RecipeListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
 
         viewModel.navigateToRecipeDetailsScreen.observe(this) { recipe ->
             val direction = RecipeListFragmentDirections.toRecipeDetailsFragment(recipe.id)
@@ -43,72 +44,73 @@ class RecipeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = RecipeListFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
 
+
         setFragmentResultListener(requestKey = RecipeEditorFragment.REQUEST_KEY) { requestKey, bundle ->
             if (requestKey !== RecipeEditorFragment.REQUEST_KEY) return@setFragmentResultListener
-            val newRecipe = bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_FOR_ADD_NEW_RECIPE)
+            val newRecipe =
+                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_FOR_ADD_NEW_RECIPE)
             if (newRecipe != null)
                 viewModel.addRecipe(newRecipe)
         }
 
         val adapter = RecipeListAdapter(viewModel)
+        val selectedKitchenList = SettingsFragment.initSettings()
 
         binding.recipeRecyclerView.adapter = adapter
 
         viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
             val myId = 2 //todo get real user id
-            var recipes = recipeList
+            val filteredCategory = Kitchen.selectedKitchenList.filter { it.isChecked }.map { it.title }
 
             //initial state
-            if (recipeList.isEmpty()) binding.noResults.visibility = View.VISIBLE
-            else binding.noResults.visibility = View.GONE
+            setNoItemImageVisibility(binding, recipeList)
 
             when (binding.bottomNavigation.selectedItemId) {
                 R.id.all_recipes -> {
+                    val recipes = recipeList.filter { it.kitchenCategory in filteredCategory }
                     adapter.submitList(recipes)
-                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
+                    setNoItemImageVisibility(binding, recipes)
                 }
                 R.id.my_recipes -> {
-                    recipes = recipeList.filter { it.authorId == myId }
+                    val recipes =
+                        recipeList.filter { it.authorId == myId && it.kitchenCategory in filteredCategory }
                     adapter.submitList(recipes)
-                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
+                    setNoItemImageVisibility(binding, recipes)
                 }
                 R.id.favorite_recipes -> {
-                    recipes= recipeList.filter { it.isFavorite  }
+                    val recipes =
+                        recipeList.filter { it.isFavorite && it.kitchenCategory in filteredCategory }
                     adapter.submitList(recipes)
-                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
-                }
-                else -> {
-                    adapter.submitList(recipeList)
-                    binding.noResults.visibility = View.GONE
+                    setNoItemImageVisibility(binding, recipes)
                 }
             }
         }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            var recipeList = viewModel.recipeList.value
+            val filteredCategory = Kitchen.selectedKitchenList.filter { it.isChecked }.map { it.title }
+            val recipeList = viewModel.recipeList.value
             when (item.itemId) {
                 R.id.all_recipes -> {
                     requireActivity().invalidateOptionsMenu()
-                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
-                    else binding.noResults.visibility = View.GONE
-                    adapter.submitList(viewModel.recipeList.value)
+                    val recipes = recipeList?.filter { it.kitchenCategory in filteredCategory }
+                    adapter.submitList(recipes)
+                    setNoItemImageVisibility(binding, recipes)
                     return@setOnItemSelectedListener true
                 }
                 R.id.my_recipes -> {
                     requireActivity().invalidateOptionsMenu()
                     val myId = 2 //TODO get my id to show corrected list
-                    recipeList = viewModel.recipeList.value?.filter { it.authorId == myId }
-                    adapter.submitList(recipeList)
-                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
-                    else binding.noResults.visibility = View.GONE
+                    val recipes = recipeList?.filter { it.authorId == myId && it.kitchenCategory in filteredCategory }
+                    adapter.submitList(recipes)
+                    setNoItemImageVisibility(binding, recipes)
                     return@setOnItemSelectedListener true
                 }
                 R.id.favorite_recipes -> {
                     requireActivity().invalidateOptionsMenu()
-                    recipeList = viewModel.recipeList.value?.filter { it.isFavorite }
-                    adapter.submitList(recipeList)
-                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
-                    else binding.noResults.visibility = View.GONE
+                    val recipes =
+                        recipeList?.filter { it.isFavorite && it.kitchenCategory in filteredCategory }
+                    adapter.submitList(recipes)
+                    setNoItemImageVisibility(binding, recipes)
                     return@setOnItemSelectedListener true
                 }
             }
@@ -124,7 +126,8 @@ class RecipeListFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
-        val bottomNavigationView = activity?.findViewById(R.id.bottomNavigation) as BottomNavigationView
+        val bottomNavigationView =
+            activity?.findViewById(R.id.bottomNavigation) as BottomNavigationView
         with(menu) {
             findItem(R.id.edit_button).isVisible = false
             findItem(R.id.delete_button).isVisible = false
@@ -182,7 +185,18 @@ class RecipeListFragment : Fragment() {
                 viewModel.onAddClicked()
                 true
             }
+            R.id.filter_button -> {
+                val direction = RecipeListFragmentDirections.toSettingsFragment()
+                findNavController().navigate(direction)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun setNoItemImageVisibility(binding: RecipeListFragmentBinding, recipeList: List<Recipe>?) {
+        if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
+        else binding.noResults.visibility = View.GONE
+    }
+
 }

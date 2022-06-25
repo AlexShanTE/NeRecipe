@@ -17,13 +17,13 @@ import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.CookingStepEditorBinding
 import com.shante.nerecipe.domain.CookingStep
-import com.shante.nerecipe.presentation.adapters.constructorScreen.CookingStepSevice
+import com.shante.nerecipe.presentation.adapters.editorScreen.CookingStepService
 
 class CookingStepEditorFragment : Fragment() {
 
     private val args = navArgs<CookingStepEditorFragmentArgs>()
 
-    private val cookingStepService = CookingStepSevice
+    private val cookingStepService = CookingStepService
 
     private var selectedCookingStepImageUri: Uri? = null
 
@@ -80,7 +80,7 @@ class CookingStepEditorFragment : Fragment() {
             pickImage.launch(MIMETYPE_IMAGES)
         }
 
-        binding.okButton.setOnClickListener {
+        binding.okeyButton.setOnClickListener {
             val newDescription = binding.descriptionStepEditText.text
             if (!newDescription.isNullOrBlank()) {
                 val step = CookingStep(

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.RecipeDetailsFragmentBinding
+import com.shante.nerecipe.domain.Kitchen
 import com.shante.nerecipe.domain.Recipe
 import com.shante.nerecipe.presentation.adapters.detailsScreen.RecipeDetailsCookingInstructionAdapter
 import com.shante.nerecipe.presentation.adapters.detailsScreen.RecipeDetailsIngredientsAdapter
@@ -41,12 +42,11 @@ class RecipeDetailsFragment : Fragment() {
 
         setFragmentResultListener(requestKey = RecipeEditorFragment.REQUEST_KEY) { requestKey, bundle ->
             if (requestKey !== RecipeEditorFragment.REQUEST_KEY) return@setFragmentResultListener
-            val recipe = bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_FOR_ADD_NEW_RECIPE)
+            val recipe =
+                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_FOR_ADD_NEW_RECIPE)
             if (recipe != null)
                 viewModel.editRecipe(recipe)
         }
-
-        val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
 
 //        Callback for backPressed
         requireActivity().onBackPressedDispatcher.addCallback(this) {
@@ -68,8 +68,7 @@ class RecipeDetailsFragment : Fragment() {
                     recipeItemPreview.recipePreview.setImageResource(R.drawable.ic_no_image)
                 }
 
-
-                if (recipe.kitchenCategory == "Undefined category") { //todo придумать что то с категорией
+                if (recipe.kitchenCategory == Kitchen.selectedKitchenList.last().title) { //todo придумать что то с категорией
                     recipeItemPreview.kitchenCategory.visibility = View.GONE
                 } else recipeItemPreview.kitchenCategory.text = recipe.kitchenCategory
                 if (recipe.cookingTime == null) {
@@ -94,35 +93,24 @@ class RecipeDetailsFragment : Fragment() {
                 cookingStepsAdapter.submitList(recipe.cookingInstructionList)
                 // endregion Cooking Steps List
 
-                when (recipe.isIngredientsShowed) {
-                    true -> {
-                        ingredientsList.visibility = View.VISIBLE
-                        showIngredientsButton.setIconResource(R.drawable.ic_arrow_drop_up)
-                    }
-                    false -> {
-                        ingredientsList.visibility = View.GONE
-                        showIngredientsButton.setIconResource(R.drawable.ic_arrow_drop_down)
-                    }
-                }
-
-                when (recipe.isCookingStepsShowed) {
-                    true -> {
+                showCookingInstructionButton.setOnClickListener {
+                    if (cookingInstructionList.visibility == View.VISIBLE) {
+                        cookingInstructionList.visibility = View.GONE
+                        showCookingInstructionButton.setIconResource(R.drawable.ic_arrow_drop_down)
+                    } else {
                         cookingInstructionList.visibility = View.VISIBLE
                         showCookingInstructionButton.setIconResource(R.drawable.ic_arrow_drop_up)
                     }
-                    false -> {
-                        cookingInstructionList.visibility = View.GONE
-                        showCookingInstructionButton.setIconResource(R.drawable.ic_arrow_drop_down)
-                    }
-                }
-
-
-                showCookingInstructionButton.setOnClickListener {
-                    viewModel.onCookStepsShowClicked(recipe)
                 }
 
                 showIngredientsButton.setOnClickListener {
-                    viewModel.onIngredientsShowClicked(recipe)
+                    if (ingredientsList.visibility == View.VISIBLE) {
+                        ingredientsList.visibility = View.GONE
+                        showIngredientsButton.setIconResource(R.drawable.ic_arrow_drop_down)
+                    } else {
+                        ingredientsList.visibility = View.VISIBLE
+                        showIngredientsButton.setIconResource(R.drawable.ic_arrow_drop_up)
+                    }
                 }
 
                 recipeItemPreview.favoriteButton.setOnClickListener {
@@ -149,29 +137,31 @@ class RecipeDetailsFragment : Fragment() {
             findItem(R.id.ok_button).isVisible = false
             val myId = 2 //TODO get my id to show corrected list
             val recipe = viewModel.recipeList.value?.find { it.id == args.recipeId }
-                when (recipe?.authorId) {
-                    myId -> {
-                        findItem(R.id.edit_button).isVisible = true
-                        findItem(R.id.delete_button).isVisible = true
-                    }
-                    else -> {
-                        findItem(R.id.edit_button).isVisible = false
-                        findItem(R.id.delete_button).isVisible = false
-                    }
+            when (recipe?.authorId) {
+                myId -> {
+                    findItem(R.id.edit_button).isVisible = true
+                    findItem(R.id.delete_button).isVisible = true
+                }
+                else -> {
+                    findItem(R.id.edit_button).isVisible = false
+                    findItem(R.id.delete_button).isVisible = false
                 }
             }
         }
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.delete_button -> {
-                val recipe = viewModel.recipeList.value?.find { it.id == args.recipeId } ?: return true
+                val recipe =
+                    viewModel.recipeList.value?.find { it.id == args.recipeId } ?: return false
                 viewModel.onDeleteClicked(recipe)
                 findNavController().popBackStack()
                 true
             }
             R.id.edit_button -> {
-                val recipe = viewModel.recipeList.value?.find { it.id == args.recipeId } ?: return true
+                val recipe =
+                    viewModel.recipeList.value?.find { it.id == args.recipeId } ?: return false
                 viewModel.onEditClicked(recipe)
                 true
             }

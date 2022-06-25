@@ -1,12 +1,11 @@
-package com.shante.nerecipe.presentation.adapters.constructorScreen
+package com.shante.nerecipe.presentation.adapters.editorScreen
 
 import com.shante.nerecipe.domain.CookingStep
-import com.shante.nerecipe.domain.Ingredient
 import java.util.*
 
 typealias  CookingStepListener = (cookingSteps: List<CookingStep>) -> Unit
 
-object CookingStepSevice {
+object CookingStepService {
 
     private var cookingSteps = mutableListOf<CookingStep>()
 

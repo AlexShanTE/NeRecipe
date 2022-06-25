@@ -18,7 +18,9 @@ import com.shante.nerecipe.databinding.RecipeEditorFragmentBinding
 import com.shante.nerecipe.domain.CookingStep
 import com.shante.nerecipe.domain.Ingredient
 import com.shante.nerecipe.domain.Recipe
-import com.shante.nerecipe.presentation.adapters.constructorScreen.*
+import com.shante.nerecipe.presentation.adapters.editorScreen.*
+import com.shante.nerecipe.presentation.adapters.interactionListeners.CookingStepsInteractionListener
+import com.shante.nerecipe.presentation.adapters.interactionListeners.IngredientInteractionListener
 import com.shante.nerecipe.utils.CookingTimeConverter
 
 
@@ -27,7 +29,7 @@ class RecipeEditorFragment : Fragment() {
     private val args by navArgs<RecipeEditorFragmentArgs>()  // recipe or null
 
     private val ingredientService: IngredientService = IngredientService
-    private val cookingStepsService: CookingStepSevice = CookingStepSevice
+    private val cookingStepsService: CookingStepService = CookingStepService
 
     private var selectedRecipePreviewImageUri: Uri? = null
 
@@ -58,8 +60,6 @@ class RecipeEditorFragment : Fragment() {
 
         val recipe = args.recipe
 
-        Log.d("TAG",args.toString())
-
         if (recipe !== null) {
             ingredientService.setIngredientsList(recipe.ingredientsList as MutableList<Ingredient>)
             cookingStepsService.setCookingStepsList(recipe.cookingInstructionList as MutableList<CookingStep>)
@@ -82,7 +82,7 @@ class RecipeEditorFragment : Fragment() {
             }
         }
 
-        val ingredientsAdapter = IngredientsAdapter(object : IngredientActionListener {
+        val ingredientsAdapter = IngredientsAdapter(object : IngredientInteractionListener {
             override fun onIngredientUp(ingredient: Ingredient, moveBy: Int) {
                 ingredientService.moveIngredient(ingredient, moveBy)
             }
@@ -107,7 +107,7 @@ class RecipeEditorFragment : Fragment() {
 
         val cookingInstructionStepsAdapter =
             this.context?.let {
-                CookingInstructionStepsAdapter(it, object : CookingInstructionStepsActionListener {
+                CookingInstructionStepsAdapter(it, object : CookingStepsInteractionListener {
                     override fun onCookingStepUp(cookingStep: CookingStep, moveBy: Int) {
                         cookingStepsService.moveCookingStep(cookingStep, moveBy)
                     }
@@ -255,7 +255,7 @@ class RecipeEditorFragment : Fragment() {
                         view?.findViewById<EditText>(R.id.cooking_time_minutes)?.text.toString()
                     ),
                     ingredientsList = IngredientService.getIngredients(),
-                    cookingInstructionList = CookingStepSevice.getCookingSteps(),
+                    cookingInstructionList = CookingStepService.getCookingSteps(),
                     /* todo если стоит заглушка, то передать  в previewURL Null,
                          ecли selectedRecipePreviewImageUri не null то загрузить на сервер и передать ссылку
                          selectedRecipePreviewImageUri обнулить
