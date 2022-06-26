@@ -94,10 +94,6 @@ class CookingStepEditorFragment : Fragment() {
             if (!newDescription.isNullOrBlank()) {
                 val step = CookingStep(
                     description = newDescription.toString(),
-                    /* todo если стоит заглушка, то передать  в stepImageURL Null,
-                         ecли selectedCookingStepImageUri не null то загрузить на сервер и передать ссылку
-                         selectedImg обнулить
-                    */
                     stepImageUri = when {
                         imageCookingStepUri !== null -> imageCookingStepUri
                         imageCookingStepPreviewTag== imageCookingStepPreviewIsEmptyTag -> null

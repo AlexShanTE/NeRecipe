@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -23,12 +24,14 @@ import com.shante.nerecipe.domain.Recipe
 import com.shante.nerecipe.presentation.adapters.editorScreen.*
 import com.shante.nerecipe.presentation.adapters.interactionListeners.CookingStepsInteractionListener
 import com.shante.nerecipe.presentation.adapters.interactionListeners.IngredientInteractionListener
+import com.shante.nerecipe.presentation.viewModel.RecipeListViewModel
 import com.shante.nerecipe.utils.CookingTimeConverter
 
 
 class RecipeEditorFragment : Fragment() {
 
     private val args by navArgs<RecipeEditorFragmentArgs>()  // recipe or null
+    private val viewModel: RecipeListViewModel by viewModels()
 
     private val ingredientService: IngredientService = IngredientService
     private val cookingStepsService: CookingStepService = CookingStepService
@@ -64,7 +67,7 @@ class RecipeEditorFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        val recipe = args.recipe
+        val recipe = args.recipe?.id?.let { viewModel.getRecipeById(it) }
 
         if (recipe !== null) {
             ingredientService.setIngredientsList(recipe.ingredientsList as MutableList<Ingredient>)
@@ -147,8 +150,8 @@ class RecipeEditorFragment : Fragment() {
             cookingInstructionStepsAdapter?.cookingSteps = cookingStepsService.getCookingSteps()
         }
 
-        ingredientService.addListener(ingredientsListener)  //TODO разобраться со слушателем
-        cookingStepsService.addListener(cookingStepsListener)  //TODO разобраться со слушателем
+        ingredientService.addListener(ingredientsListener)
+        cookingStepsService.addListener(cookingStepsListener)
 
         binding.previewClearButton.setOnClickListener {
             binding.previewAddButton.visibility = View.VISIBLE
@@ -226,6 +229,7 @@ class RecipeEditorFragment : Fragment() {
 
         }
 
+
         binding.addCookingStepButton.setOnClickListener {
             val direction = RecipeEditorFragmentDirections.toCookingStepEditorFragment(null)
             findNavController().navigate(direction)
@@ -249,7 +253,7 @@ class RecipeEditorFragment : Fragment() {
             findItem(R.id.edit_button).isVisible = false
             findItem(R.id.delete_button).isVisible = false
             findItem(R.id.ok_button).isVisible = true
-            findItem(R.id.preview_clear_button).isVisible = true
+            findItem(R.id.cancel_button).isVisible = true
         }
     }
 
@@ -260,7 +264,7 @@ class RecipeEditorFragment : Fragment() {
             R.id.ok_button -> {
                 val resultBundle = Bundle(1)
                 val newRecipe = Recipe(
-                    id = if (args.recipe !== null) args.recipe!!.id else -1,
+                    id =  args.recipe?.id ?: Recipe.UNDEFINED_ID,
                     title = view?.findViewById<EditText>(R.id.title)?.text.toString(),
                     author = "Me", //todo get account name
                     authorId = 2, //todo get account id
@@ -277,8 +281,6 @@ class RecipeEditorFragment : Fragment() {
                         args.recipe?.previewUri !== null -> args.recipe?.previewUri
                         else -> null
                     },
-                    isIngredientsShowed = false,
-                    isCookingStepsShowed = false,
                     isFavorite = false
                 )
 //                Log.d("TAG", "recipe preview id ${binding.recipePreview.drawable.state}")
@@ -291,7 +293,7 @@ class RecipeEditorFragment : Fragment() {
                 }
                 true
             }
-            R.id.preview_clear_button -> {
+            R.id.cancel_button -> {
                 clearServicesData()
                 findNavController().popBackStack()
                 true
@@ -327,9 +329,9 @@ class RecipeEditorFragment : Fragment() {
     }
 
     private fun clearServicesData() {
-        ingredientService.targetIngredient = null //TODO если эта хрень есть то чистится вьюмодель
-        ingredientService.setIngredientsList(mutableListOf()) //TODO если эта хрень есть то чистится вьюмодель
-        cookingStepsService.setCookingStepsList(mutableListOf()) //TODO если эта хрень есть то чистится вьюмодель
+        ingredientService.targetIngredient = null
+        ingredientService.setIngredientsList(mutableListOf())
+        cookingStepsService.setCookingStepsList(mutableListOf())
     }
 
     companion object {

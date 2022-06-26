@@ -61,7 +61,7 @@ class SettingsFragment : Fragment() {
             findItem(R.id.search_button).isVisible = false
             findItem(R.id.filter_button).isVisible = false
             findItem(R.id.add_button).isVisible = false
-            findItem(R.id.preview_clear_button).isVisible = false
+            findItem(R.id.cancel_button).isVisible = false
             findItem(R.id.ok_button).isVisible = true
         }
     }

@@ -1,4 +1,4 @@
-package com.shante.nerecipe.presentation.adapters
+package com.shante.nerecipe.presentation.adapters.recipeListScreen
 
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +44,7 @@ class RecipeListAdapter(
             with(binding) {
                 author.text = recipe.author
                 title.text = recipe.title
-                if (recipe.kitchenCategory == Kitchen.selectedKitchenList.last().title) { //todo придумать что то с категорией
+                if (recipe.kitchenCategory == Kitchen.selectedKitchenList.last().title) {
                     kitchenCategory.visibility = View.GONE
                 } else kitchenCategory.text = recipe.kitchenCategory
                 if (recipe.cookingTime == null) {
@@ -59,8 +59,6 @@ class RecipeListAdapter(
                 } else {
                     recipePreview.setImageResource(R.drawable.ic_no_image)
                 }
-
-
                 when (recipe.isFavorite) {
                     true -> favoriteButton.setImageResource(R.drawable.ic_star_24)
                     false -> favoriteButton.setImageResource(R.drawable.ic_star_border_24)
