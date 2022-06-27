@@ -8,11 +8,11 @@ import kotlinx.parcelize.Parcelize
 data class CookingStep(
     val description: String,
     val stepImageUri: Uri? = null,
-    val id: Int = UNDEFINED_ID
-):Parcelable {
+    val id: Int
+    ):Parcelable {
 
     companion object {
-        const val UNDEFINED_ID = -1
+        const val UNDEFINED_ID = 0
     }
 
 }

@@ -2,6 +2,7 @@ package com.shante.nerecipe.presentation.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
         setSupportActionBar(binding.topAppBar)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, false)
+
     }
 
     private val destinationListener =

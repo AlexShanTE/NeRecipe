@@ -49,4 +49,5 @@
     <string name="show_ingredients">Show ingredients</string>
     <string name="cooking_instruction">Cooking instruction</string>
     <string name="ok">OK</string>
+    <string name="description_of_step_should_not_be_empty">Description should not be empty</string>
 </resources>

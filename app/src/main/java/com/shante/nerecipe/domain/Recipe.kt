@@ -14,14 +14,12 @@ data class Recipe(
     val ingredientsList: List<Ingredient>,
     val cookingInstructionList: List<CookingStep>,
     val previewUri: Uri? = null,
-    val isIngredientsShowed:Boolean = false,
-    val isCookingStepsShowed:Boolean = false,
     val isFavorite: Boolean = false,
-    val id: Int = UNDEFINED_ID
+    val id: Int
 ):Parcelable {
 
     companion object {
-        const val UNDEFINED_ID = -1
+        const val UNDEFINED_ID = 0
     }
 
 }

@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -57,4 +58,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
     //Gson
     implementation 'com.google.code.gson:gson:2.9.0'
+    //Room
+    def room_version = "2.4.2"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    //LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
 }
