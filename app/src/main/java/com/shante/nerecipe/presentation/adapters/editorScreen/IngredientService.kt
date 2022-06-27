@@ -19,6 +19,7 @@ object IngredientService {
 
     fun setIngredientsList(ingredientList: MutableList<Ingredient>) {
         ingredients = ingredientList
+        notifyChanges()
     }
 
     fun deleteIngredient(ingredient: Ingredient) {
@@ -34,7 +35,7 @@ object IngredientService {
             if (ingredients.isNotEmpty()) {
                 val newId = ingredients.maxOf { it.id } + 1
                 ingredients.add(ingredient.copy(id = newId))
-            } else ingredients.add(ingredient.copy(id = 1))
+            } else ingredients.add(ingredient.copy(id = Ingredient.UNDEFINED_ID + 1))
             notifyChanges()
         } else editIngredient(ingredient)
     }

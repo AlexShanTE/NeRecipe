@@ -2,6 +2,7 @@ package com.shante.nerecipe.utils
 
 import android.net.Uri
 import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.shante.nerecipe.db.RecipeEntity
@@ -34,14 +35,29 @@ object CookingStepListTypeConverter {
         @TypeConverter
         fun stringToCookingStepsList(data: String?): List<CookingStep> {
             if (data == null) return Collections.emptyList()
-            val listType: Type = object : TypeToken<List<CookingStep>>() {}.type
-            return gson.fromJson<List<CookingStep>>(data, listType)
+            val listType: Type = object : TypeToken<kotlin.collections.List<String>>() {}.type
+            val listOfStringOfSteps = gson.fromJson<List<String>>(data, listType)
+            val listOfCookingSteps : MutableList<CookingStep> = mutableListOf()
+            for (step in listOfStringOfSteps) {
+                listOfCookingSteps.add(
+                    CookingStep(
+                        description = step.substringAfter("description=").substringBefore(","),
+                        stepImageUri = ImageUriConverter.fromString(step.substringAfter("stepImageUri=").substringBefore(",")),
+                        id = step.substringAfter("id=").substringBefore(")").toInt()
+                    )
+                )
+            }
+            return listOfCookingSteps
         }
 
         @TypeConverter
         fun cookingStepsListToString(someObjects: List<CookingStep>): String {
             if (someObjects == null) return ""
-            return gson.toJson(someObjects)
+            val listOfString : MutableList<String> = mutableListOf()
+            for (step in someObjects){
+                listOfString.add(step.toString())
+            }
+            return gson.toJson(listOfString)
         }
 }
 

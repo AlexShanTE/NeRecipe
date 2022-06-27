@@ -218,7 +218,7 @@ class RecipeListFragment : Fragment() {
         filteredByRequest: Boolean,
         selectedBottomMenuItemId: Int
     ): List<Recipe> {
-        val myId = 2 // TODO
+        val myId = 2 //todo get account id
         val selectedKitchenCategory =
             Kitchen.selectedKitchenList.filter { it.isChecked }.map { it.title }
         val textView = activity?.findViewById(R.id.toolBarEditText) as AutoCompleteTextView

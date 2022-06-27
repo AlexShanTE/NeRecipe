@@ -69,28 +69,50 @@ class RecipeEditorFragment : Fragment() {
 
         val recipe = args.recipe?.id?.let { viewModel.getRecipeById(it) }
 
+        binding.previewAddButton.visibility = View.VISIBLE
+        binding.previewClearButton.visibility = View.GONE
+
         if (recipe !== null) {
-            ingredientService.setIngredientsList(recipe.ingredientsList as MutableList<Ingredient>)
-            cookingStepsService.setCookingStepsList(recipe.cookingInstructionList as MutableList<CookingStep>)
-            binding.title.setText(recipe.title)
-            binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.cookingTime))
-            binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.cookingTime))
-            binding.kitchenCategoryTitle.text = recipe.kitchenCategory
-            if (recipe.previewUri !== null) {
-                imageRecipePreviewTag = null
-                binding.previewAddButton.visibility = View.GONE
-                binding.previewClearButton.visibility = View.VISIBLE
+            val editedCookingStepList = cookingStepsService.getCookingSteps()
+            val editedIngredientsList = ingredientService.getIngredients()
+            when (editedCookingStepList) {
+                emptyList<CookingStep>() -> cookingStepsService.setCookingStepsList(recipe.cookingInstructionList as MutableList<CookingStep>)
+                else -> cookingStepsService.setCookingStepsList(editedCookingStepList as MutableList<CookingStep>)
+            }
+            when (editedIngredientsList) {
+                emptyList<Ingredient>() -> ingredientService.setIngredientsList(recipe.ingredientsList as MutableList<Ingredient>)
+                else -> ingredientService.setIngredientsList(editedIngredientsList as MutableList<Ingredient>)
+            }
+
+            if (savedInstanceState == null) {
+                binding.title.setText(recipe.title)
+                binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.cookingTime))
+                binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.cookingTime))
+                binding.kitchenCategoryTitle.text = recipe.kitchenCategory
+                if (recipe.previewUri !== null) {
+                    imageRecipePreviewTag = null
+                    binding.previewAddButton.visibility = View.GONE
+                    binding.previewClearButton.visibility = View.VISIBLE
+                    Glide.with(this)
+                        .asDrawable()
+                        .load(recipe.previewUri)
+                        .error(R.drawable.ic_no_image)
+                        .into(binding.recipePreview)
+                }
+            }
+        } else binding.recipePreview.setImageResource(R.drawable.ic_no_image)
+
+        if (imageRecipePreviewUri !== null) {
                 Glide.with(this)
                     .asDrawable()
-                    .load(recipe.previewUri)
+                    .load(imageRecipePreviewUri)
                     .error(R.drawable.ic_no_image)
                     .into(binding.recipePreview)
-            } else {
-                binding.recipePreview.setImageResource(R.drawable.ic_no_image)
-                binding.previewAddButton.visibility = View.VISIBLE
-                binding.previewClearButton.visibility = View.GONE
-            }
+            binding.previewAddButton.visibility = View.GONE
+            binding.previewClearButton.visibility = View.VISIBLE
         }
+
+        if (selectedKitchen !== null) binding.kitchenCategoryTitle.text = selectedKitchen
 
         val ingredientsAdapter = IngredientsAdapter(object : IngredientInteractionListener {
             override fun onIngredientUp(ingredient: Ingredient, moveBy: Int) {
@@ -127,6 +149,7 @@ class RecipeEditorFragment : Fragment() {
                     }
 
                     override fun onCookingStepEdit(cookingStep: CookingStep) {
+                        cookingStepsService.targetCookingStep = cookingStep
                         val direction =
                             RecipeEditorFragmentDirections.toCookingStepEditorFragment(cookingStep)
                         findNavController().navigate(direction)
@@ -146,6 +169,7 @@ class RecipeEditorFragment : Fragment() {
         val ingredientsListener: IngredientListener = {
             ingredientsAdapter.ingredients = ingredientService.getIngredients()
         }
+
         val cookingStepsListener: CookingStepListener = {
             cookingInstructionStepsAdapter?.cookingSteps = cookingStepsService.getCookingSteps()
         }
@@ -158,7 +182,7 @@ class RecipeEditorFragment : Fragment() {
             binding.previewClearButton.visibility = View.GONE
             binding.recipePreview.setImageResource(R.drawable.ic_no_image)
             imageRecipePreviewUri = null
-            imageRecipePreviewTag = imageRecipePreviewIsEmptyTag
+            imageRecipePreviewTag = IMAGE_RECIPE_PREVIEW_IS_EMPTY_TAG
         }
 
         binding.previewAddButton.setOnClickListener {
@@ -178,6 +202,7 @@ class RecipeEditorFragment : Fragment() {
                 inflate(R.menu.kitchen_category_menu)
                 setOnMenuItemClickListener {
                     binding.kitchenCategoryTitle.text = it.title
+                    selectedKitchen = it.title.toString()
                     true
                 }
             }.show()
@@ -185,7 +210,8 @@ class RecipeEditorFragment : Fragment() {
 
         binding.addIngredientButton.setOnClickListener {
             val ingredientEditGroupVisibility = binding.ingredientEditGroup.visibility
-            val targetIngredient = ingredientService.targetIngredient // notnull means ingredient edit mode
+            val targetIngredient =
+                ingredientService.targetIngredient // notnull means ingredient edit mode
 
             // too much if coz of hard logic
             if (ingredientEditGroupVisibility == View.GONE) {
@@ -214,7 +240,8 @@ class RecipeEditorFragment : Fragment() {
             if (ingredientEditGroupVisibility == View.VISIBLE && targetIngredient == null) {
                 ingredientService.targetIngredient = Ingredient(
                     title = binding.newIngredientNameEditText.text.toString(),
-                    value = binding.newIngredientValueEditText.text.toString()
+                    value = binding.newIngredientValueEditText.text.toString(),
+                    id = Ingredient.UNDEFINED_ID
                 )
                 ingredientService.targetIngredient?.let { ingredient ->
                     ingredientService.addIngredient(ingredient)
@@ -229,11 +256,13 @@ class RecipeEditorFragment : Fragment() {
 
         }
 
-
         binding.addCookingStepButton.setOnClickListener {
             val direction = RecipeEditorFragmentDirections.toCookingStepEditorFragment(null)
             findNavController().navigate(direction)
         }
+
+        Log.d("TAG", "step list editor fragment ${CookingStepService.getCookingSteps()}")
+
 
     }.root
 
@@ -259,12 +288,11 @@ class RecipeEditorFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val binding = RecipeEditorFragmentBinding.inflate(layoutInflater)
         return when (item.itemId) {
             R.id.ok_button -> {
                 val resultBundle = Bundle(1)
                 val newRecipe = Recipe(
-                    id =  args.recipe?.id ?: Recipe.UNDEFINED_ID,
+                    id = args.recipe?.id ?: Recipe.UNDEFINED_ID,
                     title = view?.findViewById<EditText>(R.id.title)?.text.toString(),
                     author = "Me", //todo get account name
                     authorId = 2, //todo get account id
@@ -277,14 +305,12 @@ class RecipeEditorFragment : Fragment() {
                     cookingInstructionList = CookingStepService.getCookingSteps(),
                     previewUri = when {
                         imageRecipePreviewUri !== null -> imageRecipePreviewUri
-                        imageRecipePreviewTag == imageRecipePreviewIsEmptyTag -> null
+                        imageRecipePreviewTag == IMAGE_RECIPE_PREVIEW_IS_EMPTY_TAG -> null
                         args.recipe?.previewUri !== null -> args.recipe?.previewUri
                         else -> null
                     },
                     isFavorite = false
                 )
-//                Log.d("TAG", "recipe preview id ${binding.recipePreview.drawable.state}")
-                Log.d("TAG", "R.drawable.ic_no_image id ${R.drawable.ic_no_image}")
                 if (checkRecipeForEmptyFields(newRecipe)) {
                     clearServicesData()
                     resultBundle.putParcelable(RESULT_KEY_FOR_ADD_NEW_RECIPE, newRecipe)
@@ -329,6 +355,7 @@ class RecipeEditorFragment : Fragment() {
     }
 
     private fun clearServicesData() {
+        selectedKitchen = null
         ingredientService.targetIngredient = null
         ingredientService.setIngredientsList(mutableListOf())
         cookingStepsService.setCookingStepsList(mutableListOf())
@@ -338,9 +365,10 @@ class RecipeEditorFragment : Fragment() {
         const val RESULT_KEY_FOR_ADD_NEW_RECIPE = "add recipe"
         const val REQUEST_KEY = "requestKey"
         const val MIMETYPE_IMAGES = "image/*"
+        const val IMAGE_RECIPE_PREVIEW_IS_EMPTY_TAG = "empty image preview"
         var imageRecipePreviewUri: Uri? = null
-        var imageRecipePreviewTag : String? = null
-        const val imageRecipePreviewIsEmptyTag = "empty image preview"
+        var imageRecipePreviewTag: String? = null
+        var selectedKitchen: String? = null
 
     }
 

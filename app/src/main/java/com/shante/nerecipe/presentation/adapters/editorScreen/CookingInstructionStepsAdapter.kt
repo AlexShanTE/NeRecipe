@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.CookingStepItemBinding
 import com.shante.nerecipe.domain.CookingStep
+import com.shante.nerecipe.domain.Ingredient
 import com.shante.nerecipe.presentation.adapters.interactionListeners.CookingStepsInteractionListener
 
 
@@ -24,6 +25,7 @@ class CookingInstructionStepsAdapter(
             field = newValue
             notifyDataSetChanged()
         }
+
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -77,19 +79,19 @@ class CookingInstructionStepsAdapter(
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.move_up -> {
-                        cookingStepsInteractionListener.onCookingStepUp(cookingStep, -1)
+                        cookingStepsInteractionListener.onCookingStepUp(cookingSteps[position], -1)
                         true
                     }
                     R.id.move_down -> {
-                        cookingStepsInteractionListener.onCookingStepDown(cookingStep,1)
+                        cookingStepsInteractionListener.onCookingStepDown(cookingSteps[position],1)
                         true
                     }
                     R.id.edit -> {
-                        cookingStepsInteractionListener.onCookingStepEdit(cookingStep)
+                        cookingStepsInteractionListener.onCookingStepEdit(cookingSteps[position])
                         true
                     }
                     R.id.delete -> {
-                        cookingStepsInteractionListener.onCookingStepDelete(cookingStep)
+                        cookingStepsInteractionListener.onCookingStepDelete(cookingSteps[position])
                         true
                     }
                     else -> false

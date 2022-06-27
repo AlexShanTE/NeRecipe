@@ -44,7 +44,7 @@ class RecipeDetailsCookingInstructionAdapter :
                     Glide.with(binding.stepPreview)
                             .asDrawable()
                             .load(cookingStep.stepImageUri)
-                            .error(R.mipmap.ic_launcher)
+                            .error(R.drawable.ic_no_image)
                             .into(binding.stepPreview)
                     }
                 cookingStepOptionsButton.visibility = View.GONE

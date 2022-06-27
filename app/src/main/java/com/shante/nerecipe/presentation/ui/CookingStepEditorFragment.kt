@@ -2,6 +2,7 @@ package com.shante.nerecipe.presentation.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ class CookingStepEditorFragment : Fragment() {
 
     private val args = navArgs<CookingStepEditorFragmentArgs>()
 
+
     private val cookingStepService = CookingStepService
 
     private var selectedCookingStepImageUri: Uri? = null
@@ -43,8 +45,7 @@ class CookingStepEditorFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = CookingStepEditorBinding.inflate(layoutInflater, container, false).also { binding ->
 
-
-        if (args.value !== null) {
+        if (args.value.cookingStep !== null) {
             val step = args.value.cookingStep
             binding.descriptionStepEditText.setText(step?.description)
             if (step?.stepImageUri == null) {
@@ -63,6 +64,7 @@ class CookingStepEditorFragment : Fragment() {
             }
         } else {
             binding.clearPreviewButton.visibility = View.GONE
+            binding.stepPreview.setImageResource(R.drawable.ic_no_image)
         }
 
         binding.clearPreviewButton.setOnClickListener {
@@ -96,13 +98,15 @@ class CookingStepEditorFragment : Fragment() {
                     description = newDescription.toString(),
                     stepImageUri = when {
                         imageCookingStepUri !== null -> imageCookingStepUri
-                        imageCookingStepPreviewTag== imageCookingStepPreviewIsEmptyTag -> null
+                        imageCookingStepPreviewTag == imageCookingStepPreviewIsEmptyTag -> null
                         args.value.cookingStep?.stepImageUri !== null -> args.value.cookingStep?.stepImageUri
                         else -> null
                     },
-                    id = args.value.cookingStep?.id ?: -1
+                    id = args.value.cookingStep?.id ?: CookingStep.UNDEFINED_ID
                 )
+                Log.d("TAG", "step  ${step.toString()}")
                 cookingStepService.addCookingStep(step)
+                Log.d("TAG", "step list step editor ${CookingStepService.getCookingSteps()}")
                 findNavController().popBackStack()
             } else {
                 Toast.makeText(
@@ -114,7 +118,6 @@ class CookingStepEditorFragment : Fragment() {
         }
 
     }.root
-
 
     companion object {
         const val MIMETYPE_IMAGES = "image/*"
