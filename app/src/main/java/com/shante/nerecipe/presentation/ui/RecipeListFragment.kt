@@ -9,6 +9,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -30,6 +31,7 @@ class RecipeListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
+
         viewModel.navigateToRecipeDetailsScreen.observe(this) { recipe ->
             val direction = RecipeListFragmentDirections.toRecipeDetailsFragment(recipe.id)
             findNavController().navigate(direction)
@@ -47,6 +49,11 @@ class RecipeListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = RecipeListFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
+
+        //        Callback for backPressed
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigateUp()
+        }
 
 
         setFragmentResultListener(requestKey = RecipeEditorFragment.REQUEST_KEY) { requestKey, bundle ->
@@ -207,7 +214,7 @@ class RecipeListFragment : Fragment() {
     private fun setNoItemImageVisibility(
         recipeList: List<Recipe>?
     ) {
-        val noResultsImageView  = activity?.findViewById(R.id.no_results) as ImageView
+        val noResultsImageView = activity?.findViewById(R.id.no_results) as ImageView
         if (recipeList?.isEmpty() == true) noResultsImageView.visibility = View.VISIBLE
         else noResultsImageView.visibility = View.GONE
     }
@@ -218,7 +225,7 @@ class RecipeListFragment : Fragment() {
         filteredByRequest: Boolean,
         selectedBottomMenuItemId: Int
     ): List<Recipe> {
-        val myId = 2 // TODO
+        val myId = 2 //todo get account id
         val selectedKitchenCategory =
             Kitchen.selectedKitchenList.filter { it.isChecked }.map { it.title }
         val textView = activity?.findViewById(R.id.toolBarEditText) as AutoCompleteTextView
@@ -237,10 +244,10 @@ class RecipeListFragment : Fragment() {
         if (filteredByKitchen) newRecipeList =
             newRecipeList.filter { it.kitchenCategory in selectedKitchenCategory }
         if (filteredByRequest) newRecipeList = newRecipeList.filter {
-            it.title.contains(
+            it.title.contains(textView.text, ignoreCase = true) || it.author.contains(
                 textView.text,
                 ignoreCase = true
-            ) || it.author.contains(textView.text)
+            )
         }
         setNoItemImageVisibility(newRecipeList)
         return newRecipeList

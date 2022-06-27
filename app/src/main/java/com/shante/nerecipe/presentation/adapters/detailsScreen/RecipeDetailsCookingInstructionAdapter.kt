@@ -36,18 +36,16 @@ class RecipeDetailsCookingInstructionAdapter :
             this.cookingStep = cookingStep
             with(binding) {
                 cookingStepDescription.text = cookingStep.description
+                cookingStepOptionsButton.visibility = View.GONE
                 step.text = "Step ${adapterPosition + 1}"
-                if (cookingStep.stepImageUri == null) {
-                    stepPreview.visibility = View.GONE
-                } else {
+                if (cookingStep.stepImageUri !== null) {
                     stepPreview.visibility = View.VISIBLE
                     Glide.with(binding.stepPreview)
-                            .asDrawable()
-                            .load(cookingStep.stepImageUri)
-                            .error(R.mipmap.ic_launcher)
-                            .into(binding.stepPreview)
-                    }
-                cookingStepOptionsButton.visibility = View.GONE
+                        .asDrawable()
+                        .load(cookingStep.stepImageUri)
+                        .error(R.drawable.ic_no_image)
+                        .into(binding.stepPreview)
+                } else stepPreview.visibility = View.GONE
             }
         }
     }

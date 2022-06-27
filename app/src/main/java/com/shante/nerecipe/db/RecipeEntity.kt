@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.google.gson.annotations.SerializedName
 import com.shante.nerecipe.domain.CookingStep
 import com.shante.nerecipe.domain.Ingredient
 import com.shante.nerecipe.utils.CookingStepListTypeConverter
@@ -33,15 +34,12 @@ class RecipeEntity(
     val cookingTime: String?,
     @ColumnInfo(name = "ingredientsList")
     @NotNull
-    @TypeConverters(IngredientListTypeConverter::class)
     val ingredientsList: List<Ingredient>,
     @ColumnInfo(name = "cookingInstructionList")
     @NotNull
-    @TypeConverters(CookingStepListTypeConverter::class)
     val cookingInstructionList: List<CookingStep>,
     @ColumnInfo(name = "previewUri")
     @Nullable
-    @TypeConverters(ImageUriConverter::class)
     val previewUri: Uri?,
     @ColumnInfo(name = "isFavorite")
     val isFavorite: Boolean,

@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:hint="Description of step"
         android:textSize="@dimen/addition_text_size"
-        app:layout_constraintEnd_toStartOf="@id/cancel_edit_step_button"
+        app:layout_constraintEnd_toStartOf="@id/clear_description_step_button"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/step_preview"
@@ -51,7 +51,7 @@
         />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/cancel_edit_step_button"
+        android:id="@+id/clear_description_step_button"
         android:layout_width="@dimen/base_constructor_icon_size"
         android:layout_height="@dimen/base_constructor_icon_size"
         android:backgroundTint="@android:color/transparent"

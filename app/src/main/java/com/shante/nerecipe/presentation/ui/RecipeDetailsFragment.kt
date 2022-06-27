@@ -55,7 +55,7 @@ class RecipeDetailsFragment : Fragment() {
         }
 
         viewModel.data.observe(viewLifecycleOwner) { recipeList ->
-            val recipe = viewModel.getRecipeById(args.recipeId)
+            val recipe = recipeList.first { it.id == args.recipeId }
             with(binding) {
                 recipeItemPreview.author.text = recipe.author
                 recipeItemPreview.title.text = recipe.title

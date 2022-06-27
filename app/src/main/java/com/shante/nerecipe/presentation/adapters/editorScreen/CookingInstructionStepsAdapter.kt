@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.shante.nerecipe.R
 import com.shante.nerecipe.databinding.CookingStepItemBinding
 import com.shante.nerecipe.domain.CookingStep
+import com.shante.nerecipe.domain.Ingredient
 import com.shante.nerecipe.presentation.adapters.interactionListeners.CookingStepsInteractionListener
 
 
@@ -24,6 +25,7 @@ class CookingInstructionStepsAdapter(
             field = newValue
             notifyDataSetChanged()
         }
+
 
     override fun onClick(v: View?) {
         when (v?.id) {
